@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>三版赛马 · 交互批注版 · 英文Hiphop</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background:#0a0a0a; color:#d4d4d4; line-height:1.75; }
+  .container { max-width:1200px; margin:0 auto; padding:20px; display:flex; gap:20px; }
+  
+  /* Left: Lyrics content */
+  .content-area { flex:1; min-width:0; }
+  
+  /* Right: Annotation panel */
+  .anno-panel { width:340px; flex-shrink:0; position:sticky; top:20px; height:calc(100vh - 40px); overflow-y:auto; }
+  
+  header { text-align:center; padding:20px 0 16px; border-bottom:1px solid #222; margin-bottom:20px; }
+  header h1 { font-size:22px; color:#fff; }
+  header .sub { color:#888; font-size:13px; margin-top:4px; }
+  
+  .toolbar { display:flex; gap:10px; justify-content:center; margin-bottom:20px; flex-wrap:wrap; }
+  .toolbar button { padding:8px 18px; border-radius:8px; border:none; font-size:13px; font-weight:600; cursor:pointer; transition:all .2s; }
+  .btn-annotate { background:#ff3366; color:#fff; }
+  .btn-annotate:hover { background:#ff5588; }
+  .btn-annotate.active { background:#ff3366; box-shadow:0 0 0 3px #ff336666; }
+  .btn-export { background:#1a1a1a; color:#ccc; border:1px solid #444; }
+  .btn-export:hover { background:#222; }
+  .btn-clear { background:#1a1a1a; color:#888; border:1px solid #444; }
+  .btn-clear:hover { background:#222; color:#fff; }
+  
+  .nav { display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap; justify-content:center; }
+  .nav a { display:block; padding:6px 14px; background:#1a1a1a; border:1px solid #333; border-radius:8px; color:#ccc; text-decoration:none; font-size:12px; font-weight:600; }
+  .nav a:hover { background:#222; color:#fff; }
+  
+  /* Version styling */
+  .version { margin-bottom:40px; }
+  .version-header { display:flex; align-items:center; gap:12px; margin-bottom:14px; padding-bottom:10px; border-bottom:2px solid; }
+  .version-header h2 { font-size:17px; color:#fff; }
+  .version-header .model-tag { font-size:11px; padding:2px 8px; border-radius:4px; font-weight:700; }
+  
+  .version-a .version-header { border-color:#ff3366; }
+  .version-a .model-tag { background:#ff3366; color:#fff; }
+  .version-b .version-header { border-color:#10a37f; }
+  .version-b .model-tag { background:#10a37f; color:#fff; }
+  .version-c .version-header { border-color:#4285f4; }
+  .version-c .model-tag { background:#4285f4; color:#fff; }
+  
+  /* Lyrics section */
+  .section { margin-bottom:16px; }
+  .section-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
+  .version-a .section-label { color:#ff6699; }
+  .version-b .section-label { color:#3dd9a8; }
+  .version-c .section-label { color:#7aaefc; }
+  
+  .lyrics-box { background:#121212; border:1px solid #2a2a2a; border-radius:10px; padding:14px 16px; }
+  .lyrics-box .tag-line { font-size:12px; color:#ffcc66; font-weight:600; font-family: 'SF Mono', 'Fira Code', monospace; margin-bottom:8px; }
+  .lyrics-box .comment { color:#6a9955; font-style:italic; font-size:12px; margin-bottom:6px; }
+  
+  /* Clickable lyrics lines */
+  .lyrics-box .line { 
+    font-size:13.5px; color:#e8e8e8; 
+    font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace;
+    padding:3px 8px; margin:2px -8px; border-radius:4px;
+    cursor: default; transition:all .15s;
+    position:relative;
+  }
+  .annotate-mode .lyrics-box .line { cursor:pointer; }
+  .annotate-mode .lyrics-box .line:hover { background:#1a1a1a; }
+  .annotate-mode .lyrics-box .line:hover::before {
+    content:'✎'; position:absolute; left:-20px; color:#ff3366; font-size:12px;
+  }
+  
+  /* Highlight styles for annotated lines */
+  .line.has-annotation { background:#ff336622; border-left:3px solid #ff3366; padding-left:5px; }
+  .version-b .line.has-annotation { background:#10a37f22; border-left-color:#10a37f; }
+  .version-c .line.has-annotation { background:#4285f422; border-left-color:#4285f4; }
+  
+  /* Annotation panel */
+  .anno-panel-inner { background:#151515; border:1px solid #2a2a2a; border-radius:12px; padding:16px; }
+  .anno-panel-title { font-size:14px; font-weight:700; color:#fff; margin-bottom:12px; padding-bottom:10px; border-bottom:1px solid #333; }
+  
+  .anno-form { margin-bottom:16px; }
+  .anno-form .selected-text { background:#1a1a1a; border:1px solid #444; border-radius:8px; padding:10px 12px; font-size:12px; color:#ccc; margin-bottom:10px; min-height:36px; }
+  .anno-form .selected-text.empty { color:#666; font-style:italic; }
+  .anno-form textarea { width:100%; background:#0f0f0f; border:1px solid #333; border-radius:8px; color:#e8e8e8; font-size:13px; padding:10px; resize:vertical; min-height:80px; font-family: inherit; margin-bottom:8px; }
+  .anno-form textarea:focus { outline:none; border-color:#666; }
+  .anno-form .btn-save { width:100%; padding:10px; background:#ff3366; color:#fff; border:none; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; }
+  .anno-form .btn-save:hover { background:#ff5588; }
+  .anno-form .btn-save:disabled { background:#444; color:#888; cursor:not-allowed; }
+  
+  .anno-list { max-height:calc(100vh - 360px); overflow-y:auto; }
+  .anno-item { background:#1a1a1a; border:1px solid #333; border-radius:8px; padding:12px; margin-bottom:10px; cursor:pointer; transition:all .15s; }
+  .anno-item:hover { background:#222; border-color:#444; }
+  .anno-item .anno-text { font-size:11px; color:#999; margin-bottom:6px; line-height:1.6; }
+  .anno-item .anno-text strong { color:#ccc; }
+  .anno-item .anno-note { font-size:12px; color:#ddd; line-height:1.6; }
+  .anno-item .anno-meta { font-size:10px; color:#666; margin-top:6px; }
+  .anno-item .btn-delete { float:right; background:none; border:none; color:#666; cursor:pointer; font-size:14px; padding:0; }
+  .anno-item .btn-delete:hover { color:#ff3366; }
+  
+  .anno-empty { text-align:center; padding:40px 20px; color:#666; font-size:13px; }
+  
+  /* Export modal */
+  .modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:#000000cc; z-index:1000; align-items:center; justify-content:center; }
+  .modal-overlay.show { display:flex; }
+  .modal-box { background:#1a1a1a; border:1px solid #444; border-radius:12px; padding:24px; max-width:600px; width:90%; max-height:80vh; }
+  .modal-box h3 { color:#fff; font-size:16px; margin-bottom:12px; }
+  .modal-box pre { background:#0a0a0a; border:1px solid #333; border-radius:8px; padding:16px; font-size:12px; color:#ccc; overflow-x:auto; white-space:pre-wrap; max-height:50vh; overflow-y:auto; line-height:1.8; }
+  .modal-box .btn-copy { margin-top:12px; padding:10px 20px; background:#ff3366; color:#fff; border:none; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; }
+  .modal-box .btn-close { margin-top:12px; margin-left:8px; padding:10px 20px; background:#333; color:#ccc; border:none; border-radius:8px; font-size:13px; cursor:pointer; }
+  
+  .style-prompt { background:#151515; border:1px solid #333; border-radius:10px; padding:14px; margin:14px 0; }
+  .style-prompt h4 { font-size:13px; color:#fff; margin-bottom:8px; }
+  .style-prompt p { font-size:12px; color:#aaa; line-height:1.8; }
+  .style-prompt .tag { color:#ffcc66; font-weight:600; }
+  
+  .footer { text-align:center; color:#555; font-size:12px; padding:20px 0; border-top:1px solid #222; margin-top:20px; }
+  
+  /* Annotate mode indicator */
+  .mode-indicator { position:fixed; top:10px; right:10px; background:#ff3366; color:#fff; padding:6px 14px; border-radius:20px; font-size:12px; font-weight:600; z-index:100; display:none; }
+  .mode-indicator.show { display:block; }
+  
+  @media (max-width:900px) {
+    .container { flex-direction:column; }
+    .anno-panel { width:100%; position:static; height:auto; }
+  }
+</style>
+</head>
+<body>
+
+<div class="mode-indicator" id="modeIndicator">✎ 批注模式 — 点击歌词即可批注</div>
+
+<div class="container">
+
+<div class="content-area">
+
+<header>
+  <h1>🎤 三版赛马 · 交互批注版</h1>
+  <div class="sub">点击「开启批注模式」→ 选择歌词中的任意一句 → 右侧填写修改意见</div>
+</header>
+
+<div class="toolbar">
+  <button class="btn-annotate" id="btnAnnotate" onclick="toggleAnnotateMode()">✎ 开启批注模式</button>
+  <button class="btn-export" onclick="exportAnnotations()">📋 导出批注</button>
+  <button class="btn-clear" onclick="clearAllAnnotations()">🗑️ 清空批注</button>
+</div>
+
+<div class="nav">
+  <a href="#lysa">A版 · Not Lost</a>
+  <a href="#gpt">B版 · Quiet Strength</a>
+  <a href="#gemini">C版 · The Low Hum</a>
+</div>
+
+<!-- ========== VERSION A: LYSA ========== -->
+<div class="version version-a" id="lysa">
+  <div class="version-header">
+    <h2>🎵 A版 · Not Lost</h2>
+    <span class="model-tag">莎总 / Lysa</span>
+  </div>
+
+  <div class="style-prompt">
+    <h4>🎛️ 莎总感觉的风格Prompt</h4>
+    <p><span class="tag">[track: genre: hip-hop, melodic rap, conscious rap, style: cinematic, warm, gospel-influenced, mood: bittersweet hopeful, length: 240]</span><br>
+    <span class="tag">[male: emotional, raw, melodic rap delivery]</span><br>
+    <span class="tag">[instruments: piano, synth bass, 808 drums, gospel choir textures, ambient pad]</span><br>
+    <span class="tag">[tempo: mid-tempo hip-hop groove]</span><br>
+    <span class="tag">[background-vocals: harmonic, layered, gospel choir]</span><br><br>
+    <strong>方向：</strong>方向A·微光励志 — 没有一句"加油"，所有力量感都来自"被爱"本身。Melodic Rap叙事流，Hook用大开口元音/oʊ/（home/alone/whole/soul），福音感和声层叠。Bridge从说唱转chant爆发"I'm not lost / I'm just loved"，私密忏悔室感→Final Chorus大合唱，对比最强。</p>
+  </div>
+
+  <div class="section" data-version="A" data-section="intro">
+    <div class="section-label">Intro · Spoken Word</div>
+    <div class="lyrics-box">
+      <div class="tag-line">[intro | instruments: solo piano, ambient pad, spoken word]</div>
+      <div class="line" data-v="A" data-sec="intro" data-line="1">Yeah... this one's for the ones who never let us fall</div>
+      <div class="line" data-v="A" data-sec="intro" data-line="2">The voice in the static, the light through the wall</div>
+      <div class="line" data-v="A" data-sec="intro" data-line="3">You know who you are.</div>
+    </div>
+  </div>
+
+  <div class="section" data-version="A" data-section="verse1">
+    <div class="section-label">Verse 1 · Rap</div>
+    <div class="lyrics-box">
+      <div class="tag-line">[verse | style: narrative, introspective, vocals: emotional rap delivery]</div>
+      <div class="line" data-v="A" data-sec="verse1" data-line="1">They told me toughen up, don't let 'em see you bleed</div>
+      <div class="line" data-v="A" data-sec="verse1" data-line="2">Put a mask on, boy, that's what they need</div>
+      <div class="line" data-v="A" data-sec="verse1" data-line="3">But late nights when the city sleep, I stare at the ceiling</div>
+      <div class="line" data-v="A" data-sec="verse1" data-line="4">Wondering if any of this chasing even got a meaning</div>
+      <div class="line" data-v="A" data-sec="verse1" data-line="5">Phone buzzing, notifications screaming my name</div>
+      <div class="line" data-v="A" data-sec="verse1" data-line="6">But none of 'em asking if I'm okay, it's all the same</div>
+      <div class="line" data-v="A" data-sec="verse1" data-line="7">Pressure building like a storm inside my chest</div>
+      <div class="line" data-v="A" data-sec="verse1" data-line="8">Feeling like a puzzle with a piece that won't connect</div>
+      <div class="line" data-v="A" data-sec="verse1" data-line="9">Then I hear your voice, not through the phone, through the years</div>
+      <div class="line" data-v="A" data-sec="verse1" data-line="10">Saying "run your race, I'll be right here"</div>
+      <div class="line" data-v="A" data-sec="verse1" data-line="11">And suddenly the weight don't feel so heavy no more</div>
+      <div class="line" data-v="A" data-sec="verse1" data-line="12">'Cause I know there's a harbor waiting on the shore</div>
+    </div>
+  </div>
+
+  <div class="section" data-version="A" data-section="pre1">
+    <div class="section-label">Pre-Chorus · Melodic</div>
+    <div class="lyrics-box">
+      <div class="tag-line">[pre-chorus | style: building tension, vocals: melodic transition]</div>
+      <div class="line" data-v="A" data-sec="pre1" data-line="1">When the ground starts shaking and the walls cave in</div>
+      <div class="line" data-v="A" data-sec="pre1" data-line="2">When I'm standing at the edge wondering where to begin</div>
+      <div class="line" data-v="A" data-sec="pre1" data-line="3">I remember...</div>
+    </div>
+  </div>
+
+  <div class="section" data-version="A" data-section="chorus1">
+    <div class="section-label">Chorus · Hook (Gospel Feel)</div>
+    <div class="lyrics-box">
+      <div class="tag-line">[chorus | style: anthemic, vocals: powerful emotional belt, instruments: full drums + choir swell]</div>
+      <div class="line" data-v="A" data-sec="chorus1" data-line="1">Everybody needs someone to call home</div>
+      <div class="line" data-v="A" data-sec="chorus1" data-line="2">A hand that won't let go when you're out there all alone</div>
+      <div class="line" data-v="A" data-sec="chorus1" data-line="3">You taught me broken pieces still can make a whole</div>
+      <div class="line" data-v="A" data-sec="chorus1" data-line="4">Now I walk with heavy gold, 'cause your love is my soul</div>
+      <div class="tag-line">[background-vocals: layered, gospel choir ad-libs]</div>
+      <div class="line" data-v="A" data-sec="chorus1" data-line="5">Not lost, not lost</div>
+      <div class="line" data-v="A" data-sec="chorus1" data-line="6">Just loved, just loved</div>
+    </div>
+  </div>
+
+  <div class="section" data-version="A" data-section="verse2">
+    <div class="section-label">Verse 2 · Rap</div>
+    <div class="lyrics-box">
+      <div class="tag-line">[verse-2 | style: narrative deepening, vocals: emotional rap delivery]</div>
+      <div class="line" data-v="A" data-sec="verse2" data-line="1">Used to think I had to carry it all by myself</div>
+      <div class="line" data-v="A" data-sec="verse2" data-line="2">Like asking for help was putting pride up on the shelf</div>
+      <div class="line" data-v="A" data-sec="verse2" data-line="3">But you showed me strength ain't about never breaking</div>
+      <div class="line" data-v="A" data-sec="verse2" data-line="4">It's about knowing who to call when your hands start shaking</div>
+      <div class="line" data-v="A" data-sec="verse2" data-line="5">Every scar I got, you saw it before I did</div>
+      <div class="line" data-v="A" data-sec="verse2" data-line="6">Every time I fell, you were praying where I hid</div>
+      <div class="line" data-v="A" data-sec="verse2" data-line="7">And I ain't religious but I feel something holy</div>
+      <div class="line" data-v="A" data-sec="verse2" data-line="8">When you look at me like I'm somebody worth knowing</div>
+      <div class="line" data-v="A" data-sec="verse2" data-line="9">The world wants me harder, colder, meaner, numb</div>
+      <div class="line" data-v="A" data-sec="verse2" data-line="10">But your voice in my head says "just come home, son"</div>
+      <div class="line" data-v="A" data-sec="verse2" data-line="11">So I keep my head up, not 'cause I'm fearless</div>
+      <div class="line" data-v="A" data-sec="verse2" data-line="12">But 'cause I know behind me, your love is the clearest</div>
+    </div>
+  </div>
+
+  <div class="section" data-version="A" data-section="bridge">
+    <div class="section-label">Bridge · Build-up & Burst</div>
+    <div class="lyrics-box">
+      <div class="tag-line">[bridge | style: intense, dynamic, vocals: raw emotional burst, instruments: stripped + rebuild]</div>
+      <div class="line" data-v="A" data-sec="bridge" data-line="1">I was shattered, scattered on the floor</div>
+      <div class="line" data-v="A" data-sec="bridge" data-line="2">You walked in, didn't ask what for</div>
+      <div class="line" data-v="A" data-sec="bridge" data-line="3">Just started picking up the parts of me</div>
+      <div class="line" data-v="A" data-sec="bridge" data-line="4">Saying "you're not lost, you're just finding where to be"</div>
+      <div class="line" data-v="A" data-sec="bridge" data-line="5">And I cried, yeah I broke down in your arms</div>
+      <div class="line" data-v="A" data-sec="bridge" data-line="6">No performance, no alarms</div>
+      <div class="line" data-v="A" data-sec="bridge" data-line="7">Just a kid who needed somebody to see</div>
+      <div class="line" data-v="A" data-sec="bridge" data-line="8">The mess underneath and still believe in me</div>
+      <div class="line" data-v="A" data-sec="bridge" data-line="9">I'm not lost, I'm not lost</div>
+      <div class="line" data-v="A" data-sec="bridge" data-line="10">I'm just loved, I'm just loved</div>
+      <div class="line" data-v="A" data-sec="bridge" data-line="11">At whatever cost</div>
+    </div>
+  </div>
+
+  <div class="section" data-version="A" data-section="final">
+    <div class="section-label">Final Chorus · Full Choir</div>
+    <div class="lyrics-box">
+      <div class="tag-line">[final-chorus | style: full anthemic, vocals: soaring + choir, instruments: full orchestra + drums]</div>
+      <div class="tag-line">[background-vocals: full gospel choir, layered harmonies, ad-libs]</div>
+      <div class="line" data-v="A" data-sec="final" data-line="1">Everybody needs someone to call home</div>
+      <div class="line" data-v="A" data-sec="final" data-line="2">A hand that won't let go when you're out there all alone</div>
+      <div class="line" data-v="A" data-sec="final" data-line="3">You taught me broken pieces still can make a whole</div>
+      <div class="line" data-v="A" data-sec="final" data-line="4">Now I walk with heavy gold, 'cause your love is my soul</div>
+      <div class="line" data-v="A" data-sec="final" data-line="5">Not lost, not lost</div>
+      <div class="line" data-v="A" data-sec="final" data-line="6">Just loved, just loved</div>
+    </div>
+  </div>
+
+  <div class="section" data-version="A" data-section="outro">
+    <div class="section-label">Outro · Spoken Fade</div>
+    <div class="lyrics-box">
+      <div class="tag-line">[outro | style: fading, vocals: soft spoken, instruments: piano + vocal echo]</div>
+      <div class="line" data-v="A" data-sec="outro" data-line="1">Yeah... they say it takes somebody to love somebody</div>
+      <div class="line" data-v="A" data-sec="outro" data-line="2">I feel that now</div>
+      <div class="line" data-v="A" data-sec="outro" data-line="3">For everyone who ever held us up...</div>
+      <div class="line" data-v="A" data-sec="outro" data-line="4">This is yours.</div>
+      <div class="comment">(fade out with piano + vocal echo)</div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== VERSION B: GPT ========== -->
+<div class="version version-b" id="gpt">
+  <div class="version-header">
+    <h2>🎵 B版 · Quiet Strength</h2>
+    <span class="model-tag">GPT-4o-mini</span>
+  </div>
+
+  <div class="style-prompt">
+    <h4>🎛️ GPT版风格Prompt</h4>
+    <p><span class="tag">[track: genre: hip-hop, pop rap, style: uplifting, warm, cinematic, mood: hopeful inspiring, length: 240]</span><br>
+    <span class="tag">[male: clear, strong, emotional rap delivery]</span><br>
+    <span class="tag">[instruments: piano, acoustic guitar, live drums, strings, synth pad]</span><br>
+    <span class="tag">[tempo: mid-tempo, steady hip-hop groove]</span><br>
+    <span class="tag">[background-vocals: harmonic, layered, ethereal]</span><br><br>
+    <strong>方向：</strong>偏传统励志说唱，韵脚规整（AABB/CDEE），旋律温暖。"rise above""treasure of gold"等正能量词较多，微光感被稀释。适合主流励志短视频，但方向A的"被爱=不迷路"细腻感稍弱。Hook概念好（quiet strength），但旋律展开空间因韵脚变化多而受限。</p>
+  </div>
+
+  <div class="section" data-version="B" data-section="intro">
+    <div class="section-label">Intro</div>
+    <div class="lyrics-box">
+      <div class="tag-line">[intro | instruments: soft piano, ambient pad, spoken word]</div>
+      <div class="line" data-v="B" data-sec="intro" data-line="1">In the shadows where the whispers dwell,</div>
+      <div class="line" data-v="B" data-sec="intro" data-line="2">There's a light that flickers, but it shines so well.</div>
+      <div class="line" data-v="B" data-sec="intro" data-line="3">Sometimes it's the silence that speaks the loudest.</div>
+    </div>
+  </div>
+
+  <div class="section" data-version="B" data-section="verse1">
+    <div class="section-label">Verse 1 · Rap</div>
+    <div class="lyrics-box">
+      <div class="tag-line">[verse | style: reflective, storytelling, vocals: emotional rap]</div>
+      <div class="line" data-v="B" data-sec="verse1" data-line="1">I tread through valleys where the shadows loom,</div>
+      <div class="line" data-v="B" data-sec="verse1" data-line="2">Doubt's a heavy weight, it fills the room.</div>
+      <div class="line" data-v="B" data-sec="verse1" data-line="3">Lost in the noise, where dreams fade fast,</div>
+      <div class="line" data-v="B" data-sec="verse1" data-line="4">But I keep my heart close, gotta outlast.</div>
+      <div class="line" data-v="B" data-sec="verse1" data-line="5">Walls built high, but I'm learning to climb,</div>
+      <div class="line" data-v="B" data-sec="verse1" data-line="6">Every stumble and fall, I'm still in my prime.</div>
+      <div class="line" data-v="B" data-sec="verse1" data-line="7">Got a crew that's tight, like stitches on skin,</div>
+      <div class="line" data-v="B" data-sec="verse1" data-line="8">They remind me I'm golden, even when I feel thin.</div>
+      <div class="line" data-v="B" data-sec="verse1" data-line="9">Life's a puzzle, pieces scattered in the dark,</div>
+      <div class="line" data-v="B" data-sec="verse1" data-line="10">But every broken shard ignites a spark.</div>
+    </div>
+  </div>
+
+  <div class="section" data-version="B" data-section="pre1">
+    <div class="section-label">Pre-Chorus</div>
+    <div class="lyrics-box">
+      <div class="tag-line">[pre-chorus | style: melodic lift, building energy, vocals: smooth transition]</div>
+      <div class="line" data-v="B" data-sec="pre1" data-line="1">In the silence, I breathe, I find my way,</div>
+      <div class="line" data-v="B" data-sec="pre1" data-line="2">Strength in the stillness, I'm here to stay.</div>
+      <div class="line" data-v="B" data-sec="pre1" data-line="3">Whispers of love like a soft embrace,</div>
+      <div class="line" data-v="B" data-sec="pre1" data-line="4">Together we rise, in this sacred space.</div>
+    </div>
+  </div>
+
+  <div class="section" data-version="B" data-section="chorus1">
+    <div class="section-label">Chorus · Hook</div>
+    <div class="lyrics-box">
+      <div class="tag-line">[chorus | style: anthemic, vocals: powerful + layered harmonies, instruments: full drums + strings]</div>
+      <div class="line" data-v="B" data-sec="chorus1" data-line="1">We are the light when the world feels dim,</div>
+      <div class="line" data-v="B" data-sec="chorus1" data-line="2">Holding each other with love from within.</div>
+      <div class="line" data-v="B" data-sec="chorus1" data-line="3">You're enough, oh, you're more than enough,</div>
+      <div class="line" data-v="B" data-sec="chorus1" data-line="4">Through the storm and the struggle, we rise above.</div>
+      <div class="line" data-v="B" data-sec="chorus1" data-line="5">Together we shine, our hearts intertwined,</div>
+      <div class="line" data-v="B" data-sec="chorus1" data-line="6">In this quiet strength, true peace we find.</div>
+    </div>
+  </div>
+
+  <div class="section" data-version="B" data-section="verse2">
+    <div class="section-label">Verse 2 · Rap</div>
+    <div class="lyrics-box">
+      <div class="tag-line">[verse-2 | style: emotional deepening, vocals: raw but controlled rap]</div>
+      <div class="line" data-v="B" data-sec="verse2" data-line="1">Now I'm peeling back layers, showing my scars,</div>
+      <div class="line" data-v="B" data-sec="verse2" data-line="2">Vulnerability's strength, it's written in stars.</div>
+      <div class="line" data-v="B" data-sec="verse2" data-line="3">Fighting battles unseen, but feel the weight lift,</div>
+      <div class="line" data-v="B" data-sec="verse2" data-line="4">Love's a gentle force, it's the ultimate gift.</div>
+      <div class="line" data-v="B" data-sec="verse2" data-line="5">Every tear I shed, waters the ground,</div>
+      <div class="line" data-v="B" data-sec="verse2" data-line="6">From the roots of my soul, new life is found.</div>
+      <div class="line" data-v="B" data-sec="verse2" data-line="7">I'm not just a fighter, I'm learning to heal,</div>
+      <div class="line" data-v="B" data-sec="verse2" data-line="8">When the night feels heavy, I know it's real.</div>
+      <div class="line" data-v="B" data-sec="verse2" data-line="9">With each echoing heartbeat, I rise from the dust,</div>
+      <div class="line" data-v="B" data-sec="verse2" data-line="10">In this tapestry of life, it's love that I trust.</div>
+    </div>
+  </div>
+
+  <div class="section" data-version="B" data-section="bridge">
+    <div class="section-label">Bridge · Build-up</div>
+    <div class="lyrics-box">
+      <div class="tag-line">[bridge | style: intense chant-like, building, vocals: powerful group energy]</div>
+      <div class="line" data-v="B" data-sec="bridge" data-line="1">Here we are, together, in the fray,</div>
+      <div class="line" data-v="B" data-sec="bridge" data-line="2">Feel the pulse of love, guiding our way.</div>
+      <div class="line" data-v="B" data-sec="bridge" data-line="3">When the night is cold, we'll ignite the flame,</div>
+      <div class="line" data-v="B" data-sec="bridge" data-line="4">In this unity, we call each other's name.</div>
+      <div class="line" data-v="B" data-sec="bridge" data-line="5">Oh, we're more than the battles, we're stories untold,</div>
+      <div class="line" data-v="B" data-sec="bridge" data-line="6">This quiet strength, a treasure of gold.</div>
+      <div class="line" data-v="B" data-sec="bridge" data-line="7">Together we rise, let the world see,</div>
+      <div class="line" data-v="B" data-sec="bridge" data-line="8">In our harmony, we're truly free.</div>
+    </div>
+  </div>
+
+  <div class="section" data-version="B" data-section="final">
+    <div class="section-label">Final Chorus · Full Power</div>
+    <div class="lyrics-box">
+      <div class="tag-line">[final-chorus | style: full power, explosive, vocals: choir backing, instruments: full band]</div>
+      <div class="tag-line">[background-vocals: full choir, soaring harmonies]</div>
+      <div class="line" data-v="B" data-sec="final" data-line="1">We are the light when the world feels dim,</div>
+      <div class="line" data-v="B" data-sec="final" data-line="2">Holding each other with love from within.</div>
+      <div class="line" data-v="B" data-sec="final" data-line="3">You're enough, oh, you're more than enough,</div>
+      <div class="line" data-v="B" data-sec="final" data-line="4">Through the storm and the struggle, we rise above.</div>
+      <div class="line" data-v="B" data-sec="final" data-line="5">Together we shine, our hearts intertwined,</div>
+      <div class="line" data-v="B" data-sec="final" data-line="6">In this quiet strength, true peace we find.</div>
+    </div>
+  </div>
+
+  <div class="section" data-version="B" data-section="outro">
+    <div class="section-label">Outro · Fade</div>
+    <div class="lyrics-box">
+      <div class="tag-line">[outro | style: gentle reflective fade, vocals: soft, instruments: piano fade]</div>
+      <div class="line" data-v="B" data-sec="outro" data-line="1">So remember the whispers, let them guide your way,</div>
+      <div class="line" data-v="B" data-sec="outro" data-line="2">You're never alone, in love we'll stay.</div>
+      <div class="line" data-v="B" data-sec="outro" data-line="3">This quiet strength, forever our grace.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== VERSION C: GEMINI ========== -->
+<div class="version version-c" id="gemini">
+  <div class="version-header">
+    <h2>🎵 C版 · The Low Hum</h2>
+    <span class="model-tag">Gemini-2.5-pro</span>
+  </div>
+
+  <div class="style-prompt">
+    <h4>🎛️ Gemini版风格Prompt</h4>
+    <p><span class="tag">[track: genre: hip-hop, melodic rap, conscious rap, style: cinematic, warm, introspective, mood: bittersweet hopeful, length: 240]</span><br>
+    <span class="tag">[male: emotional, raw, J. Cole-style narrative delivery]</span><br>
+    <span class="tag">[instruments: piano, synth bass, 808 drums, ambient city textures, gospel choir textures]</span><br>
+    <span class="tag">[tempo: mid-tempo, slow-burning hip-hop groove]</span><br>
+    <span class="tag">[background-vocals: harmonic, layered, subtle gospel warmth]</span><br><br>
+    <strong>方向：</strong>方向A契合度最强。J. Cole叙事流，"hired than inspired""cracks in the ceiling"金句级细节密度。"low hum"核心隐喻贯穿全曲——Intro synth note → 贯穿"low hum" → Outro回归synth note，教科书级闭环。Bridge "not about the winnin', it's about the beginnin'"精准捕捉微光感：不是赢，是还在。Verse 2 "You just held the space"心理咨询术语入词，极当代。</p>
+  </div>
+
+  <div class="section" data-version="C" data-section="intro">
+    <div class="section-label">Intro · Spoken</div>
+    <div class="lyrics-box">
+      <div class="tag-line">[intro | instruments: solo piano, distant city ambience, low synth note, spoken word]</div>
+      <div class="comment">(Spoken, over faint distant city ambience and a single low synth note)</div>
+      <div class="line" data-v="C" data-sec="intro" data-line="1">The world's so damn loud, you know?</div>
+      <div class="line" data-v="C" data-sec="intro" data-line="2">Everyone's shouting what you're supposed to be.</div>
+      <div class="line" data-v="C" data-sec="intro" data-line="3">Sometimes... you just need one quiet sound to hold onto.</div>
+    </div>
+  </div>
+
+  <div class="section" data-version="C" data-section="verse1">
+    <div class="section-label">Verse 1 · Rap</div>
+    <div class="lyrics-box">
+      <div class="tag-line">[verse | style: narrative, introspective, weary grind, vocals: rhythmic storytelling rap]</div>
+      <div class="line" data-v="C" data-sec="verse1" data-line="1">Yeah, another sunrise bleeds on the windowsill</div>
+      <div class="line" data-v="C" data-sec="verse1" data-line="2">Another climb up a cold and lonely hill</div>
+      <div class="line" data-v="C" data-sec="verse1" data-line="3">Got my jaw set tight, my reflection looks tired</div>
+      <div class="line" data-v="C" data-sec="verse1" data-line="4">Chasin' a dream that feels more hired than inspired</div>
+      <div class="line" data-v="C" data-sec="verse1" data-line="5">The concrete canyons echo with the promises I made</div>
+      <div class="line" data-v="C" data-sec="verse1" data-line="6">While the sirens sing the blues of a debt that's gettin' paid</div>
+      <div class="line" data-v="C" data-sec="verse1" data-line="7">Shoulders carryin' the weight of a skyline I ain't even build</div>
+      <div class="line" data-v="C" data-sec="verse1" data-line="8">Tryna fill a space that the world told me to get filled</div>
+      <div class="line" data-v="C" data-sec="verse1" data-line="9">They say "keep your head up," but my neck is sore as hell</div>
+      <div class="line" data-v="C" data-sec="verse1" data-line="10">Just one more crack before this whole damn castle fell.</div>
+    </div>
+  </div>
+
+  <div class="section" data-version="C" data-section="pre1">
+    <div class="section-label">Pre-Chorus · Melodic</div>
+    <div class="lyrics-box">
+      <div class="tag-line">[pre-chorus | style: melodic lift, clarity moment, vocals: sung transition]</div>
+      <div class="line" data-v="C" data-sec="pre1" data-line="1">But then the static breaks, for just a second I see through</div>
+      <div class="line" data-v="C" data-sec="pre1" data-line="2">And in the noise, I get a single thought of you</div>
+      <div class="line" data-v="C" data-sec="pre1" data-line="3">It ain't a lightning strike, just a flicker in the dark</div>
+      <div class="line" data-v="C" data-sec="pre1" data-line="4">A quiet, steady beat that re-ignites the spark.</div>
+    </div>
+  </div>
+
+  <div class="section" data-version="C" data-section="chorus1">
+    <div class="section-label">Chorus · Hook (Gospel Choir)</div>
+    <div class="lyrics-box">
+      <div class="tag-line">[chorus | style: anthemic, warm gospel choir feel, vocals: soaring + layered harmonies, instruments: drums + piano + choir]</div>
+      <div class="line" data-v="C" data-sec="chorus1" data-line="1">Oh-oh-oh, I don't need a king's crown</div>
+      <div class="line" data-v="C" data-sec="chorus1" data-line="2">Just the low hum of your sound</div>
+      <div class="line" data-v="C" data-sec="chorus1" data-line="3">To know I'm on solid ground</div>
+      <div class="line" data-v="C" data-sec="chorus1" data-line="4">Oh-oh-oh, it brings me back home</div>
+      <div class="line" data-v="C" data-sec="chorus1" data-line="5">Makes me know I'm not alone</div>
+      <div class="line" data-v="C" data-sec="chorus1" data-line="6">Yeah, that's all I need to know.</div>
+    </div>
+  </div>
+
+  <div class="section" data-version="C" data-section="verse2">
+    <div class="section-label">Verse 2 · Rap</div>
+    <div class="lyrics-box">
+      <div class="tag-line">[verse-2 | style: emotional deepening, social media critique, vocals: raw introspective rap]</div>
+      <div class="line" data-v="C" data-sec="verse2" data-line="1">I see 'em postin' wins, the highlight reels and trophies</div>
+      <div class="line" data-v="C" data-sec="verse2" data-line="2">While I'm just countin' cracks in the ceiling, feelin' hopeless</div>
+      <div class="line" data-v="C" data-sec="verse2" data-line="3">An imposter in my own skin, wearin' last year's confidence</div>
+      <div class="line" data-v="C" data-sec="verse2" data-line="4">Tryna build a fortress out of common sense</div>
+      <div class="line" data-v="C" data-sec="verse2" data-line="5">They sell you dreams in a bottle, tell you "man up" and "be strong"</div>
+      <div class="line" data-v="C" data-sec="verse2" data-line="6">And you start to believe that showin' hurt is somethin' wrong</div>
+      <div class="line" data-v="C" data-sec="verse2" data-line="7">But you never did that, you never bought the paper lies</div>
+      <div class="line" data-v="C" data-sec="verse2" data-line="8">You just saw the fractures and the fear behind my eyes</div>
+      <div class="line" data-v="C" data-sec="verse2" data-line="9">You didn't offer answers or a five-step master plan</div>
+      <div class="line" data-v="C" data-sec="verse2" data-line="10">You just held the space and let me know you understand.</div>
+    </div>
+  </div>
+
+  <div class="section" data-version="C" data-section="bridge">
+    <div class="section-label">Bridge · Build-up & Burst</div>
+    <div class="lyrics-box">
+      <div class="tag-line">[bridge | style: stripped, chant-like build, vocals: raw vulnerability, instruments: minimal drums]</div>
+      <div class="line" data-v="C" data-sec="bridge" data-line="1">It's not about the winnin'</div>
+      <div class="line" data-v="C" data-sec="bridge" data-line="2">It's about the beginnin'</div>
+      <div class="line" data-v="C" data-sec="bridge" data-line="3">Of another day... and knowin' you're still in it.</div>
+      <div class="line" data-v="C" data-sec="bridge" data-line="4">It's not about the praise</div>
+      <div class="line" data-v="C" data-sec="bridge" data-line="5">It's just gettin' through the haze...</div>
+      <div class="line" data-v="C" data-sec="bridge" data-line="6">And your voice is the only thing that stays.</div>
+      <div class="line" data-v="C" data-sec="bridge" data-line="7">And that's enough...</div>
+      <div class="line" data-v="C" data-sec="bridge" data-line="8">Just knowing is enough.</div>
+    </div>
+  </div>
+
+  <div class="section" data-version="C" data-section="final">
+    <div class="section-label">Final Chorus · Full Power</div>
+    <div class="lyrics-box">
+      <div class="tag-line">[final-chorus | style: full power, explosive, choir vocals swell, instruments: full band + gospel choir]</div>
+      <div class="tag-line">[background-vocals: full gospel choir, ad-libs: "Yeah!", "That's all I need!"]</div>
+      <div class="line" data-v="C" data-sec="final" data-line="1">Oh-oh-oh, I don't need a king's crown!</div>
+      <div class="line" data-v="C" data-sec="final" data-line="2">Just the low hum of your sound!</div>
+      <div class="line" data-v="C" data-sec="final" data-line="3">To know I'm on solid ground!</div>
+      <div class="line" data-v="C" data-sec="final" data-line="4">Oh-oh-oh, it brings me back home!</div>
+      <div class="line" data-v="C" data-sec="final" data-line="5">Makes me know I'm not alone!</div>
+      <div class="line" data-v="C" data-sec="final" data-line="6">Yeah, that's all I need to know!</div>
+    </div>
+  </div>
+
+  <div class="section" data-version="C" data-section="outro">
+    <div class="section-label">Outro · Spoken Fade</div>
+    <div class="lyrics-box">
+      <div class="tag-line">[outro | style: fading, returning to intro synth, vocals: soft spoken, instruments: low synth note fade]</div>
+      <div class="comment">(Spoken, as beat fades, leaving only the low synth note from intro)</div>
+      <div class="line" data-v="C" data-sec="outro" data-line="1">The whole world can scream. It doesn't matter.</div>
+      <div class="line" data-v="C" data-sec="outro" data-line="2">I can still hear it...</div>
+      <div class="line" data-v="C" data-sec="outro" data-line="3">...that low hum.</div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  莎总(Lysa) · 2026-05-10 · 爱鲨文化音乐总监<br>
+  杰少开启批注模式 → 点击歌词任意一句 → 右侧填写修改意见 → 导出复制给我
+</div>
+
+</div>
+
+<!-- Right panel: Annotation panel -->
+<div class="anno-panel">
+  <div class="anno-panel-inner">
+    <div class="anno-panel-title">📝 批注面板</div>
+    
+    <div class="anno-form" id="annoForm">
+      <div class="selected-text empty" id="selectedText">点击左侧歌词中的任意一句，即可在此处批注...</div>
+      <textarea id="annoInput" placeholder="在这里写修改意见..." disabled></textarea>
+      <button class="btn-save" id="btnSave" onclick="saveAnnotation()" disabled>💾 保存批注</button>
+    </div>
+    
+    <div class="anno-list" id="annoList">
+      <div class="anno-empty">暂无批注<br><small>开启批注模式后，点击歌词即可添加</small></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- Export modal -->
+<div class="modal-overlay" id="exportModal">
+  <div class="modal-box">
+    <h3>📋 导出批注</h3>
+    <pre id="exportContent"></pre>
+    <button class="btn-copy" onclick="copyExport()">📋 复制全部</button>
+    <button class="btn-close" onclick="closeExport()">关闭</button>
+  </div>
+</div>
+
+<script>
+// State
+let annotateMode = false;
+let selectedLine = null;
+let annotations = [];
+let annotationIdCounter = 0;
+
+// Toggle annotate mode
+function toggleAnnotateMode() {
+  annotateMode = !annotateMode;
+  document.body.classList.toggle('annotate-mode', annotateMode);
+  document.getElementById('modeIndicator').classList.toggle('show', annotateMode);
+  
+  const btn = document.getElementById('btnAnnotate');
+  if (annotateMode) {
+    btn.textContent = '✓ 退出批注模式';
+    btn.classList.add('active');
+  } else {
+    btn.textContent = '✎ 开启批注模式';
+    btn.classList.remove('active');
+    clearSelection();
+  }
+}
+
+// Click on lyric line
+function initLineClicks() {
+  document.querySelectorAll('.line').forEach(line => {
+    line.addEventListener('click', function(e) {
+      if (!annotateMode) return;
+      
+      // Don't re-select if clicking an already selected line
+      if (selectedLine === this) return;
+      
+      // Clear previous selection highlight
+      if (selectedLine) selectedLine.classList.remove('selected-line');
+      
+      selectedLine = this;
+      this.classList.add('selected-line');
+      
+      const text = this.textContent;
+      const version = this.dataset.v;
+      const section = this.dataset.sec;
+      const lineNum = this.dataset.line;
+      
+      const sectionNames = {
+        'intro': 'Intro', 'verse1': 'Verse 1', 'verse2': 'Verse 2',
+        'pre1': 'Pre-Chorus', 'chorus1': 'Chorus', 'bridge': 'Bridge',
+        'final': 'Final Chorus', 'outro': 'Outro'
+      };
+      
+      const versionNames = { 'A': 'Not Lost', 'B': 'Quiet Strength', 'C': 'The Low Hum' };
+      
+      document.getElementById('selectedText').innerHTML = 
+        `<strong style="color:#ffcc66">${versionNames[version]}</strong> · ${sectionNames[section]} · Line ${lineNum}<br>` +
+        `<span style="color:#ccc">${text}</span>`;
+      document.getElementById('selectedText').classList.remove('empty');
+      document.getElementById('annoInput').disabled = false;
+      document.getElementById('btnSave').disabled = false;
+      document.getElementById('annoInput').focus();
+      
+      // Check if this line already has annotation
+      const existing = annotations.find(a => a.version === version && a.section === section && a.line === lineNum);
+      if (existing) {
+        document.getElementById('annoInput').value = existing.note;
+      } else {
+        document.getElementById('annoInput').value = '';
+      }
+    });
+  });
+}
+
+function clearSelection() {
+  if (selectedLine) selectedLine.classList.remove('selected-line');
+  selectedLine = null;
+  document.getElementById('selectedText').textContent = '点击左侧歌词中的任意一句，即可在此处批注...';
+  document.getElementById('selectedText').classList.add('empty');
+  document.getElementById('annoInput').value = '';
+  document.getElementById('annoInput').disabled = true;
+  document.getElementById('btnSave').disabled = true;
+}
+
+function saveAnnotation() {
+  if (!selectedLine) return;
+  
+  const note = document.getElementById('annoInput').value.trim();
+  if (!note) {
+    // If empty note, delete existing annotation if any
+    const existingIdx = annotations.findIndex(a => 
+      a.version === selectedLine.dataset.v && 
+      a.section === selectedLine.dataset.sec && 
+      a.line === selectedLine.dataset.line
+    );
+    if (existingIdx >= 0) {
+      annotations.splice(existingIdx, 1);
+      selectedLine.classList.remove('has-annotation');
+    }
+    renderAnnotations();
+    return;
+  }
+  
+  const version = selectedLine.dataset.v;
+  const section = selectedLine.dataset.sec;
+  const lineNum = selectedLine.dataset.line;
+  const text = selectedLine.textContent;
+  
+  // Update or add
+  const existingIdx = annotations.findIndex(a => 
+    a.version === version && a.section === section && a.line === lineNum
+  );
+  
+  if (existingIdx >= 0) {
+    annotations[existingIdx].note = note;
+  } else {
+    annotationIdCounter++;
+    annotations.push({
+      id: annotationIdCounter,
+      version, section, line: lineNum, text, note,
+      time: new Date().toLocaleString('zh-CN')
+    });
+  }
+  
+  selectedLine.classList.add('has-annotation');
+  renderAnnotations();
+  
+  // Clear input for next
+  document.getElementById('annoInput').value = '';
+}
+
+function renderAnnotations() {
+  const list = document.getElementById('annoList');
+  if (annotations.length === 0) {
+    list.innerHTML = '<div class="anno-empty">暂无批注<br><small>开启批注模式后，点击歌词即可添加</small></div>';
+    return;
+  }
+  
+  const sectionNames = {
+    'intro': 'Intro', 'verse1': 'Verse 1', 'verse2': 'Verse 2',
+    'pre1': 'Pre-Chorus', 'chorus1': 'Chorus', 'bridge': 'Bridge',
+    'final': 'Final Chorus', 'outro': 'Outro'
+  };
+  const versionNames = { 'A': 'Not Lost', 'B': 'Quiet Strength', 'C': 'The Low Hum' };
+  
+  // Sort by version then section
+  const sorted = [...annotations].sort((a, b) => {
+    if (a.version !== b.version) return a.version.localeCompare(b.version);
+    const secOrder = ['intro','verse1','pre1','chorus1','verse2','bridge','final','outro'];
+    return secOrder.indexOf(a.section) - secOrder.indexOf(b.section);
+  });
+  
+  list.innerHTML = sorted.map(a => `
+    <div class="anno-item" onclick="scrollToLine('${a.version}','${a.section}','${a.line}')">
+      <button class="btn-delete" onclick="event.stopPropagation(); deleteAnnotation(${a.id})">×</button>
+      <div class="anno-text"><strong style="color:#ffcc66">${versionNames[a.version]}</strong> · ${sectionNames[a.section]} · Line ${a.line}</div>
+      <div class="anno-note">${a.note}</div>
+      <div class="anno-meta">原文：${a.text.substring(0, 50)}${a.text.length > 50 ? '...' : ''}</div>
+    </div>
+  `).join('');
+}
+
+function scrollToLine(version, section, line) {
+  const lineEl = document.querySelector(`.line[data-v="${version}"][data-sec="${section}"][data-line="${line}"]`);
+  if (lineEl) {
+    lineEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    lineEl.style.animation = 'none';
+    lineEl.offsetHeight; // reflow
+    lineEl.style.animation = '';
+    lineEl.style.background = '#ff336644';
+    setTimeout(() => { lineEl.style.background = ''; }, 1500);
+  }
+}
+
+function deleteAnnotation(id) {
+  const idx = annotations.findIndex(a => a.id === id);
+  if (idx >= 0) {
+    const a = annotations[idx];
+    const lineEl = document.querySelector(`.line[data-v="${a.version}"][data-sec="${a.section}"][data-line="${a.line}"]`);
+    if (lineEl) lineEl.classList.remove('has-annotation');
+    annotations.splice(idx, 1);
+    renderAnnotations();
+  }
+}
+
+function exportAnnotations() {
+  if (annotations.length === 0) {
+    alert('暂无批注可导出');
+    return;
+  }
+  
+  const sectionNames = {
+    'intro': 'Intro', 'verse1': 'Verse 1', 'verse2': 'Verse 2',
+    'pre1': 'Pre-Chorus', 'chorus1': 'Chorus', 'bridge': 'Bridge',
+    'final': 'Final Chorus', 'outro': 'Outro'
+  };
+  const versionNames = { 'A': 'Not Lost', 'B': 'Quiet Strength', 'C': 'The Low Hum' };
+  
+  let output = `🎵 三版歌词批注汇总\n`;
+  output += `===================\n\n`;
+  
+  const sorted = [...annotations].sort((a, b) => {
+    if (a.version !== b.version) return a.version.localeCompare(b.version);
+    const secOrder = ['intro','verse1','pre1','chorus1','verse2','bridge','final','outro'];
+    return secOrder.indexOf(a.section) - secOrder.indexOf(b.section);
+  });
+  
+  let currentVer = '';
+  sorted.forEach(a => {
+    if (a.version !== currentVer) {
+      currentVer = a.version;
+      output += `\n【${versionNames[a.version]}】\n`;
+      output += `${'─'.repeat(30)}\n`;
+    }
+    output += `\n[${sectionNames[a.section]} · Line ${a.line}]\n`;
+    output += `原文：${a.text}\n`;
+    output += `批注：${a.note}\n`;
+  });
+  
+  document.getElementById('exportContent').textContent = output;
+  document.getElementById('exportModal').classList.add('show');
+}
+
+function copyExport() {
+  const content = document.getElementById('exportContent').textContent;
+  navigator.clipboard.writeText(content).then(() => {
+    alert('批注已复制到剪贴板，直接粘贴发给我即可');
+  }).catch(() => {
+    // Fallback
+    const textarea = document.createElement('textarea');
+    textarea.value = content;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    alert('批注已复制到剪贴板，直接粘贴发给我即可');
+  });
+}
+
+function closeExport() {
+  document.getElementById('exportModal').classList.remove('show');
+}
+
+function clearAllAnnotations() {
+  if (annotations.length === 0) return;
+  if (!confirm('确定要清空所有批注吗？')) return;
+  
+  document.querySelectorAll('.line.has-annotation').forEach(el => el.classList.remove('has-annotation'));
+  annotations = [];
+  renderAnnotations();
+  clearSelection();
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', function() {
+  initLineClicks();
+});
+
+// Close modal on overlay click
+document.getElementById('exportModal').addEventListener('click', function(e) {
+  if (e.target === this) closeExport();
+});
+</script>
+
+</body>
+</html>
