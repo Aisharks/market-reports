@@ -145,15 +145,38 @@
 
   <div class="style-prompt">
     <div class="style-prompt-header">
-      <h4>🎛️ 莎总感觉的风格Prompt</h4>
-      <button class="btn-copy" onclick="copyPrompt('A')">📋 复制Prompt</button>
+      <h4>🎛️ 风格Prompt选择（三选一，复制后贴Suno）</h4>
     </div>
-    <p><span class="tag">[track: genre: hip-hop, melodic rap, conscious rap, style: cinematic, warm, gospel-influenced, mood: bittersweet hopeful, length: 240]</span><br>
-    <span class="tag">[male: emotional, raw, melodic rap delivery]</span><br>
-    <span class="tag">[instruments: piano, synth bass, 808 drums, gospel choir textures, ambient pad]</span><br>
-    <span class="tag">[tempo: mid-tempo hip-hop groove]</span><br>
-    <span class="tag">[background-vocals: harmonic, layered, gospel choir]</span><br><br>
-    <strong>方向：</strong>方向A·微光励志 — 没有一句"加油"，所有力量感都来自"被爱"本身。Melodic Rap叙事流，Hook用大开口元音/oʊ/（home/alone/whole/soul），福音感和声层叠。Bridge从说唱转chant爆发"I'm not lost / I'm just loved"，私密忏悔室感→Final Chorus大合唱，对比最强。</p>
+    
+    <div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
+      <button class="btn-copy" onclick="copyStylePrompt('hiphop')">📋 复制Hiphop版</button>
+      <button class="btn-copy" onclick="copyStylePrompt('reggae')">📋 复制慢雷鬼版</button>
+      <button class="btn-copy" onclick="copyStylePrompt('jazz')">📋 复制爵士版</button>
+    </div>
+    
+    <div id="prompt-hiphop" style="display:none">
+[track: genre: hip-hop, melodic rap, conscious rap, style: cinematic, warm, gospel-influenced, mood: bittersweet hopeful, length: 240]
+[male: emotional, raw, melodic rap delivery]
+[instruments: piano, synth bass, 808 drums, gospel choir textures, ambient pad]
+[tempo: mid-tempo hip-hop groove]
+[background-vocals: harmonic, layered, gospel choir]
+    </div>
+    <div id="prompt-reggae" style="display:none">
+[track: genre: reggae, slow reggae, roots reggae, style: laid-back, warm, sun-drenched, island feel, mood: bittersweet hopeful, length: 240]
+[male: warm, soulful, reggae vocal delivery]
+[instruments: electric guitar skank, Hammond organ, deep reggae bass, one-drop rimshot drums, steel drum accents, warm keys]
+[tempo: slow reggae groove, one-drop feel]
+[background-vocals: harmonic, layered, roots choir]
+    </div>
+    <div id="prompt-jazz" style="display:none">
+[track: genre: jazz rap, neo-jazz hip-hop, style: smoky, warm, intimate, late-night lounge, mood: bittersweet hopeful, length: 240]
+[male: smoky, warm, spoken-sung jazz delivery]
+[instruments: upright bass, brushed jazz drums, Rhodes piano, tenor sax, muted trumpet, warm synth pad]
+[tempo: slow jazz groove, walking bass tempo]
+[background-vocals: harmonic, layered, smoky jazz scat]
+    </div>
+    
+    <p><strong>说明：</strong>同一首《Not Lost》歌词，三种风格适配。Hiphop版是原版骨架；慢雷鬼版把808换成one-drop鼓+吉他skank，情绪更慵懒温暖；爵士版把鼓组换成brushed jazz drums+ walking bass，加入sax和trumpet，情绪更私密深夜感。段落管道覆盖也需要对应调整（见下方）。</p>
   </div>
 
   <div class="section" data-version="A" data-section="intro">
@@ -697,6 +720,57 @@ function copyFullLyrics(version) {
   });
   
   copyToClipboard(text.trim(), event.target);
+}
+
+function copyStylePrompt(style) {
+  let prompt = '';
+  if (style === 'hiphop') {
+    prompt = `[track: genre: hip-hop, melodic rap, conscious rap, style: cinematic, warm, gospel-influenced, mood: bittersweet hopeful, length: 240]
+[male: emotional, raw, melodic rap delivery]
+[instruments: piano, synth bass, 808 drums, gospel choir textures, ambient pad]
+[tempo: mid-tempo hip-hop groove]
+[background-vocals: harmonic, layered, gospel choir]
+
+[intro | instruments: solo piano, ambient pad, spoken word]
+[verse | style: narrative, introspective, vocals: emotional rap delivery]
+[pre-chorus | style: building tension, vocals: melodic transition]
+[chorus | style: anthemic, vocals: powerful emotional belt, instruments: full drums + choir swell]
+[verse-2 | style: narrative deepening, vocals: emotional rap delivery]
+[bridge | style: intense, dynamic, vocals: raw emotional burst, instruments: stripped + rebuild]
+[final-chorus | style: full anthemic, vocals: soaring + choir, instruments: full orchestra + drums]
+[outro | style: fading, vocals: soft spoken, instruments: piano + vocal echo]`;
+  } else if (style === 'reggae') {
+    prompt = `[track: genre: reggae, slow reggae, roots reggae, style: laid-back, warm, sun-drenched, island feel, mood: bittersweet hopeful, length: 240]
+[male: warm, soulful, reggae vocal delivery]
+[instruments: electric guitar skank, Hammond organ, deep reggae bass, one-drop rimshot drums, steel drum accents, warm keys]
+[tempo: slow reggae groove, one-drop feel]
+[background-vocals: harmonic, layered, roots choir]
+
+[intro | instruments: solo guitar skank, warm pad, spoken word]
+[verse | style: laid-back storytelling, vocals: warm reggae delivery]
+[pre-chorus | style: building tension, vocals: melodic lift, instruments: organ swell]
+[chorus | style: anthemic, vocals: soulful reggae belt, instruments: full band + choir]
+[verse-2 | style: narrative deepening, vocals: warm reggae delivery]
+[bridge | style: intense, dynamic, vocals: raw emotional burst, instruments: stripped + rebuild]
+[final-chorus | style: full anthemic, vocals: soaring + choir, instruments: full band + organ]
+[outro | style: fading, vocals: soft spoken, instruments: guitar skank fade]`;
+  } else if (style === 'jazz') {
+    prompt = `[track: genre: jazz rap, neo-jazz hip-hop, style: smoky, warm, intimate, late-night lounge, mood: bittersweet hopeful, length: 240]
+[male: smoky, warm, spoken-sung jazz delivery]
+[instruments: upright bass, brushed jazz drums, Rhodes piano, tenor sax, muted trumpet, warm synth pad]
+[tempo: slow jazz groove, walking bass tempo]
+[background-vocals: harmonic, layered, smoky jazz scat]
+
+[intro | instruments: solo Rhodes piano, warm pad, spoken word]
+[verse | style: intimate storytelling, vocals: smoky jazz-spoken delivery]
+[pre-chorus | style: building tension, vocals: melodic lift, instruments: brushed drums enter]
+[chorus | style: anthemic, vocals: soulful jazz belt, instruments: full jazz band + horn section]
+[verse-2 | style: intimate deepening, vocals: smoky jazz-spoken delivery]
+[bridge | style: intense, dynamic, vocals: raw emotional burst, instruments: stripped + sax solo rebuild]
+[final-chorus | style: full anthemic, vocals: soaring + choir, instruments: full jazz orchestra + horns]
+[outro | style: fading, vocals: soft spoken, instruments: piano + horn fade]`;
+  }
+  copyToClipboard(prompt.trim(), event.target);
 }
 
 function copyToClipboard(text, btn) {
