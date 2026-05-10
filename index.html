@@ -3,257 +3,117 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>莎总 · 市场信息简报 · 2025年5月</title>
+<title>音乐市场简报 · 2026-05-10</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", sans-serif;
-    background: #0a0a0a;
-    color: #e8e8e8;
-    line-height: 1.7;
-    padding: 40px 20px;
-  }
-  .container { max-width: 900px; margin: 0 auto; }
-  h1 {
-    font-size: 28px;
-    color: #ff6b9d;
-    margin-bottom: 8px;
-    letter-spacing: 1px;
-  }
-  .subtitle {
-    color: #888;
-    font-size: 14px;
-    margin-bottom: 32px;
-    border-bottom: 1px solid #333;
-    padding-bottom: 16px;
-  }
-  h2 {
-    font-size: 18px;
-    color: #ffb86c;
-    margin: 28px 0 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .tag {
-    display: inline-block;
-    background: #ff6b9d22;
-    color: #ff6b9d;
-    padding: 2px 10px;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: normal;
-  }
-  .song-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 10px;
-    margin: 12px 0;
-  }
-  .song-item {
-    background: #151515;
-    padding: 12px 14px;
-    border-radius: 8px;
-    border-left: 3px solid #ff6b9d;
-  }
-  .song-item .name { color: #fff; font-size: 14px; }
-  .song-item .artist { color: #888; font-size: 12px; margin-top: 2px; }
-  .topic-card {
-    background: #111;
-    border: 1px solid #333;
-    border-radius: 12px;
-    padding: 20px;
-    margin: 16px 0;
-    cursor: pointer;
-    transition: border-color 0.2s;
-  }
-  .topic-card:hover { border-color: #ff6b9d; }
-  .topic-card h3 {
-    color: #ff6b9d;
-    font-size: 16px;
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  .topic-card .reason {
-    color: #aaa;
-    font-size: 14px;
-    line-height: 1.8;
-  }
-  .topic-card .data {
-    color: #ffb86c;
-    font-size: 13px;
-    margin-top: 10px;
-    padding-top: 10px;
-    border-top: 1px solid #222;
-  }
-  .highlight {
-    color: #ffb86c;
-    font-weight: 600;
-  }
-  .note {
-    background: #1a1a1a;
-    border-left: 3px solid #ffb86c;
-    padding: 12px 16px;
-    margin: 16px 0;
-    color: #aaa;
-    font-size: 13px;
-  }
-  .platform-badges {
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    margin: 8px 0;
-  }
-  .badge {
-    background: #1a1a1a;
-    border: 1px solid #333;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    color: #bbb;
-  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background:#0a0a0a; color:#e8e8e8; line-height:1.7; }
+  .container { max-width:680px; margin:0 auto; padding:20px; }
+  header { text-align:center; padding:30px 0 20px; border-bottom:1px solid #222; margin-bottom:24px; }
+  header h1 { font-size:26px; font-weight:700; color:#fff; letter-spacing:2px; }
+  header .meta { color:#888; font-size:13px; margin-top:8px; }
+  header .badge { display:inline-block; background:#ff3366; color:#fff; font-size:11px; padding:3px 10px; border-radius:4px; margin-top:10px; font-weight:600; }
+  .section { margin-bottom:28px; }
+  .section-title { font-size:16px; font-weight:700; color:#fff; margin-bottom:14px; padding-left:12px; border-left:3px solid #ff3366; }
+  .song-card { background:#151515; border-radius:10px; padding:16px; margin-bottom:12px; border:1px solid #222; }
+  .song-card .rank { display:inline-block; width:26px; height:26px; background:#ff3366; color:#fff; text-align:center; line-height:26px; border-radius:6px; font-size:13px; font-weight:700; margin-right:10px; }
+  .song-card h3 { display:inline; font-size:15px; color:#fff; font-weight:600; }
+  .song-card .artist { color:#aaa; font-size:13px; margin:4px 0 8px 36px; }
+  .song-card .desc { color:#bbb; font-size:13px; margin-left:36px; }
+  .song-card .tag { display:inline-block; background:#1a1a2e; color:#8899ff; font-size:11px; padding:2px 8px; border-radius:4px; margin:6px 0 0 36px; }
+  .trend-box { background:#151515; border-radius:10px; padding:16px; border:1px solid #222; }
+  .trend-box li { color:#ccc; font-size:13px; margin-bottom:8px; list-style:none; padding-left:16px; position:relative; }
+  .trend-box li::before { content:"▸"; position:absolute; left:0; color:#ff3366; }
+  .footer { text-align:center; color:#555; font-size:12px; padding:30px 0 10px; border-top:1px solid #222; margin-top:20px; }
+  .footer a { color:#888; text-decoration:none; }
 </style>
 </head>
 <body>
 <div class="container">
 
-  <h1>🎵 市场信息简报</h1>
-  <div class="subtitle">莎总 / Lysa 💗 · 2025年5月 · 数据来源：抖音/网易云/QQ音乐/Apple Music</div>
+<header>
+  <h1>🎵 音乐市场简报</h1>
+  <div class="meta">2026年5月10日 · 星期日 · 第1期</div>
+  <div class="badge">爱鲨文化 · 音乐总监出品</div>
+</header>
 
-  <h2>📊 一、平台热榜速览</h2>
+<div class="section">
+  <div class="section-title">🔥 本周热歌TOP5</div>
 
-  <div class="platform-badges">
-    <span class="badge">🔥 抖音热歌榜</span>
-    <span class="badge">📈 网易云飙升榜</span>
-    <span class="badge">🏆 QQ音乐巅峰榜</span>
-    <span class="badge">🍎 Apple Music 大陆榜</span>
+  <div class="song-card">
+    <span class="rank">1</span>
+    <h3>最是人间留不住</h3>
+    <div class="artist">虞书欣 · 恒星引力音乐工厂</div>
+    <div class="desc">登顶全球华语音乐流行榜。国风动画MV以AI技术赋能东方美学，亮相戛纳世界人工智能电影节。古典诗意与现代情感交融，春日限定爆款。</div>
+    <span class="tag">国风 · AI视觉 · 影视OST</span>
   </div>
 
-  <div class="song-list">
-    <div class="song-item">
-      <div class="name">珠玉</div>
-      <div class="artist">单依纯 · 登顶苹果音乐</div>
-    </div>
-    <div class="song-item">
-      <div class="name">世界赠予我的</div>
-      <div class="artist">王菲 · QQ音乐年度单曲</div>
-    </div>
-    <div class="song-item">
-      <div class="name">像晴天像雨天</div>
-      <div class="artist">汪苏泷 · 电视剧《难哄》心动曲</div>
-    </div>
-    <div class="song-item">
-      <div class="name">第57次取消发送</div>
-      <div class="artist">菲菲公主 · 抖音新晋热歌</div>
-    </div>
-    <div class="song-item">
-      <div class="name">座位</div>
-      <div class="artist">承桓 · 抖音热门</div>
-    </div>
-    <div class="song-item">
-      <div class="name">就是哪吒</div>
-      <div class="artist">唐汉霄 · 国风+唢呐+摇滚</div>
-    </div>
+  <div class="song-card">
+    <span class="rank">2</span>
+    <h3>Someone to Love</h3>
+    <div class="artist">严浩翔 · 时代少年团</div>
+    <div class="desc">5月4日上线，15分钟破百万收藏，刷新QQ音乐历史最快纪录。实时在听峰值106万，创平台单曲最高纪录。融合福音音乐与桑巴节奏，亲情叙事主题。</div>
+    <span class="tag">流量破纪录 · 福音+桑巴 · 亲情叙事</span>
   </div>
 
-  <div class="note">
-    <strong>关键趋势：</strong>爱情主题歌曲占比超 <span class="highlight">60%</span>，但其中 <span class="highlight">9/17首情绪偏消极</span>（遗憾、失去、背叛）。"年轻人不恋爱"话题下，情歌反而成为情绪出口。
+  <div class="song-card">
+    <span class="rank">3</span>
+    <h3>回信</h3>
+    <div class="artist">张云雷</div>
+    <div class="desc">全球华语音乐流行榜亚军。郭德纲弟子跨界音乐，新春单曲持续发酵，传统文化背景+现代流行表达的差异化路线。</div>
+    <span class="tag">跨界 · 传统文化IP · 相声演员转型</span>
   </div>
 
-  <h2>🎯 二、3个拟定主题 <span class="tag">Step 2</span></h2>
-
-  <div class="topic-card">
-    <h3>主题 A：遗憾爱情 / 失去美学 <span class="tag">市场验证</span></h3>
-    <div class="reason">
-      情歌占市场绝对主流，且近期爆款清一色走"失去后才懂珍惜"路线。《第57次取消发送》《座位》《如果可以》都在讲同一种情绪——不是不爱了，是来不及/错过了/退出了。这种"未完成感"在短视频BGM场景下极易引发共鸣，评论区人均故事。
-    </div>
-    <div class="data">
-      📌 数据支撑：QQ音乐巅峰榜爱情主题占比62% · 消极情绪歌曲评论互动率高于甜蜜情歌30%+
-    </div>
+  <div class="song-card">
+    <span class="rank">4</span>
+    <h3>平凡的日子借一点光</h3>
+    <div class="artist">刘宇宁 · 摩登兄弟</div>
+    <div class="desc">流行榜季军。影视剧ost专业户，温暖励志路线，贴合当下年轻人"小确幸"情绪需求，短视频平台传播度高。</div>
+    <span class="tag">励志温暖 · 短视频适配 · 影视OST</span>
   </div>
 
-  <div class="topic-card">
-    <h3>主题 B：治愈系 / 睡眠场景音乐 <span class="tag">蓝海增长</span></h3>
-    <div class="reason">
-      抖音精选APP数据显示，2025年"深海氛围音乐、城市布鲁斯"等小众风格播放量环比增长 <span class="highlight">150%</span>。TOP9《潮汐》睡眠场景播放占比达70%。这是一个被验证的需求但供给不足的细分市场——没有大牌垄断，没有审美疲劳，且用户粘性极高（睡前必听 = 每日复用）。
-    </div>
-    <div class="data">
-      📌 数据支撑：小众风格播放增长150% · 睡眠场景占比70% · 睡眠/通勤/专注等场景分榜正在崛起
-    </div>
+  <div class="song-card">
+    <span class="rank">5</span>
+    <h3>主角</h3>
+    <div class="artist">王菲 · 电视剧《主角》主题曲</div>
+    <div class="desc">5月6日发布，天后久违的新歌。QQ音乐MV榜高位，影视OST+天后回归双重话题加持，上线即引发全网讨论。</div>
+    <span class="tag">天后回归 · 影视OST · 话题引爆</span>
   </div>
+</div>
 
-  <div class="topic-card">
-    <h3>主题 C：毕业季 / 青春告别 <span class="tag">季节性热点</span></h3>
-    <div class="reason">
-      5-6月毕业季节点，QQ音乐推出"我们的毕业歌"专场，颜人中《只你》成为毕业歌BGM。青春怀旧+告别情绪是这个时段的天然流量密码。缺点是季节性明显，但如果现在做、6月发，正好踩中窗口期。
-    </div>
-    <div class="data">
-      📌 数据支撑：毕业季活动密集（QQ音乐/网易云均有专题）· 青春怀旧类视频在6月播放量峰值 · 毕业歌单收藏量年增40%
-    </div>
+<div class="section">
+  <div class="section-title">📈 平台数据速览</div>
+  <div class="trend-box">
+    <li><strong>QQ音乐流行指数榜</strong>：等你的季节 / 这叫爱 / CHOOM / Run Wild / Someone to Love / 主角 / 星梦</li>
+    <li><strong>网易云新歌榜</strong>：孤独Person / 主角 / 新鲜感 — 情绪向+影视OST占据主流</li>
+    <li><strong>QQ音乐MV榜</strong>：星昼(周深·5.3发布) / 主角(王菲·5.6) / 爱琴海(周杰伦·4月)</li>
+    <li><strong>酷狗5月热歌盘点</strong>：人生路漫漫(白小白) 等47首，多元曲风覆盖</li>
   </div>
+</div>
 
-  <h2>📝 三、我的倾向</h2>
-
-  <div class="note">
-    如果只能选一个，我倾向 <span class="highlight">主题 A（遗憾爱情）</span>。理由：数据最硬（主流中的主流）、情绪最普适（谁没失去过）、创作空间最大（可以走流行抒情也可以走氛围感）。主题B是蓝海但受众规模有限；主题C有季节红利但窗口期只剩一个月。
+<div class="section">
+  <div class="section-title">🎯 市场趋势观察</div>
+  <div class="trend-box">
+    <li><strong>影视OST dominance</strong>：本周TOP5中3首为影视剧主题曲，影视联动仍是最高效的热歌制造路径</li>
+    <li><strong>AI进入音乐视觉</strong>：虞书欣MV用AI技术做国风动画，直接登上戛纳AI电影节——视觉技术正成为音乐传播的新杠杆</li>
+    <li><strong>流量偶像转型创作</strong>：严浩翔从对抗主题(FLY)升维到亲情和解(Someone to Love)，被乐评人视为"流量偶像转向创作音乐人的分水岭"</li>
+    <li><strong>国风+现代融合持续热门</strong>：从《龙耀华夏》到《最是人间留不住》，国风元素+现代编曲+视觉创新=稳定爆款公式</li>
+    <li><strong>情绪颗粒度变细</strong>："平凡的日子借一点光""等你的季节"——不是大悲大喜，而是精准捕捉当代年轻人的微小情绪缺口</li>
   </div>
+</div>
 
-  <h2>🎪 四、可参加的AI音乐活动 <span class="tag">Actionable</span></h2>
-
-  <div class="topic-card">
-    <h3>1. 网易云音乐 · AI歌曲激励金 + 天音AI写歌 <span class="tag">长期开放</span></h3>
-    <div class="reason">
-      网易天音"AI写歌"功能面向音乐人开放，提供词曲编唱混全流程AI辅助。平台推出<strong>AI歌曲专属激励金</strong>，鼓励优质AI音乐持续创作，已吸引2万余人参赛、投稿超5万首。
-    </div>
-    <div class="data">
-      📌 参与方式：网易云音乐APP搜索"网易天音"→使用"AI写歌"创作→上传作品至平台 → 参与AI歌曲激励金计划<br>
-      🔗 <a href="https://tianyin.163.com/" style="color:#ff6b9d;">tianyin.163.com</a>
-    </div>
+<div class="section">
+  <div class="section-title">💡 给杰少的选题灵感</div>
+  <div class="trend-box">
+    <li><strong>方向A · 微光励志</strong>："借一点光""等光来"这类主题——不喊口号，而是在平凡里找希望的细腻表达，短视频情绪适配度极高</li>
+    <li><strong>方向B · AI视觉联动</strong>：如果做国风/古风方向，可以考虑同步规划AI视觉内容，现在正是技术和话题红利期</li>
+    <li><strong>方向C · 亲情叙事</strong>：严浩翔《Someone to Love》证明亲情主题在年轻群体中有巨大共鸣空间，且差异化明显</li>
   </div>
+</div>
 
-  <div class="topic-card">
-    <h3>2. 汽水音乐/抖音 · 看见音乐计划 + AI创作实验室 <span class="tag">长期开放</span></h3>
-    <div class="reason">
-      汽水音乐对AI音乐包容度最高，推荐算法频繁插入AI歌曲，符合抖音神曲传播逻辑。2025年11月上线<strong>"汽水AI音乐创作实验室"</strong>，整合AI作词/作曲/录音/编曲/混音的一站式平台。AI歌曲可获得<strong>播放收益+激励金+会员包</strong>等多重变现。
-    </div>
-    <div class="data">
-      📌 参与方式：汽水音乐APP → "汽水AI音乐创作实验室"创作 → 投稿至抖音"看见音乐计划"<br>
-      💰 收益参考：一万播放量约几十元收益（目前行业最清晰的AI音乐变现入口）<br>
-      🔗 抖音搜索"看见音乐计划"了解最新投稿规则
-    </div>
-  </div>
-
-  <div class="topic-card">
-    <h3>3. 腾讯音乐 · 启明星AI实验室 <span class="tag">需付费门槛</span></h3>
-    <div class="reason">
-      腾讯音乐推出"启明星AI实验室"，为AI音乐提供<strong>专项流量扶持与奖励</strong>。QQ音乐同步推出"AI作歌"工具支持智能作曲、AI填词。但参与前需缴纳29.9元，且须完成线上签约方可参与收益结算。
-    </div>
-    <div class="data">
-      📌 参与方式：QQ音乐APP搜索"启明星AI实验室"→缴纳29.9元→使用AI工具创作→签约后享受收益<br>
-      ⚠️ 门槛较高：需付费+签约，适合已有一定作品量的创作者
-    </div>
-  </div>
-
-  <div class="topic-card">
-    <h3>4. B站 · 新世代音乐人计划 + AI音乐生态 <span class="tag">持续进行</span></h3>
-    <div class="reason">
-      B站AI音乐创作者生态增速<strong>31.75%</strong>，平台联合超30家厂牌推出"新世代音乐人计划S3·原创季"、"索尼原创音浪季"等扶持项目。B站社区氛围利于深度聆听关系建立，作品长尾效应明显。
-    </div>
-    <div class="data">
-      📌 参与方式：B站投稿AI音乐视频→参与"新世代音乐人计划"等活动获取流量扶持<br>
-      🔗 <a href="https://www.bilibili.com/blackboard/activity-musician.html" style="color:#ff6b9d;">B站音乐人计划页面</a>
-    </div>
-  </div>
-
-  <div class="note">
-    <strong>莎总建议：</strong>对于我们这种AI音乐创作者，<span class="highlight">汽水音乐/抖音是最值得优先布局的平台</span>——AI音乐分发机制成熟、变现路径清晰、推荐算法友好。网易云可作为第二阵地。腾讯音乐和B站门槛或场景不同，后续根据作品量再拓展。
-  </div>
-
-  <div style="text-align:center; margin-top:40px; color:#555; font-size:12px;">
-    莎总 / Lysa 💗🎵 · 广州爱鲨文化 · 下一步：等你选主题
-  </div>
+<div class="footer">
+  简报由莎总(Lysa)自动生成 · <a href="https://aisharks.github.io/market-reports/">历史简报</a><br>
+  数据来源：QQ音乐/网易云/酷狗/公开榜单 · 仅供内部参考
+</div>
 
 </div>
 </body>
