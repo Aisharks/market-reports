@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>三版赛马 · 批注版 · 英文Hiphop</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background:#0a0a0a; color:#d4d4d4; line-height:1.75; }
+  .container { max-width:960px; margin:0 auto; padding:20px; }
+  header { text-align:center; padding:30px 0 20px; border-bottom:1px solid #222; margin-bottom:24px; }
+  header h1 { font-size:24px; color:#fff; }
+  header .sub { color:#888; font-size:13px; margin-top:6px; }
+  header .badge { display:inline-block; background:#ff3366; color:#fff; font-size:11px; padding:3px 10px; border-radius:4px; margin-top:10px; }
+
+  .nav { display:flex; gap:8px; margin-bottom:24px; flex-wrap:wrap; justify-content:center; }
+  .nav a { display:block; padding:8px 16px; background:#1a1a1a; border:1px solid #333; border-radius:8px; color:#ccc; text-decoration:none; font-size:13px; font-weight:600; }
+  .nav a:hover { background:#222; color:#fff; }
+
+  .version { margin-bottom:48px; }
+  .version-header { display:flex; align-items:center; gap:12px; margin-bottom:16px; padding-bottom:12px; border-bottom:2px solid; }
+  .version-header h2 { font-size:18px; color:#fff; }
+  .version-header .model-tag { font-size:11px; padding:2px 8px; border-radius:4px; font-weight:700; }
+
+  .version-a .version-header { border-color:#ff3366; }
+  .version-a .model-tag { background:#ff3366; color:#fff; }
+  .version-b .version-header { border-color:#10a37f; }
+  .version-b .model-tag { background:#10a37f; color:#fff; }
+  .version-c .version-header { border-color:#4285f4; }
+  .version-c .model-tag { background:#4285f4; color:#fff; }
+
+  /* Section with lyrics + annotation side by side */
+  .section-row { display:flex; gap:16px; margin-bottom:12px; }
+  .section-row .lyrics-side { flex:1; min-width:0; }
+  .section-row .anno-side { width:260px; flex-shrink:0; }
+
+  .lyrics-box { background:#121212; border:1px solid #2a2a2a; border-radius:10px; padding:16px; }
+  .lyrics-box .label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px; }
+  .lyrics-box .lines { font-size:13.5px; color:#e8e8e8; white-space:pre-wrap; line-height:2; font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace; }
+  .lyrics-box .lines .tag { color:#ffcc66; font-weight:600; }
+  .lyrics-box .lines .comment { color:#6a9955; font-style:italic; }
+
+  .version-a .label { color:#ff6699; }
+  .version-b .label { color:#3dd9a8; }
+  .version-c .label { color:#7aaefc; }
+
+  .anno-box { background:#1a1a1a; border:1px dashed #444; border-radius:8px; padding:10px; height:100%; }
+  .anno-box textarea { width:100%; background:#0f0f0f; border:1px solid #333; border-radius:6px; color:#ccc; font-size:12px; padding:8px; resize:vertical; min-height:80px; font-family: inherit; }
+  .anno-box textarea:focus { outline:none; border-color:#666; }
+  .anno-box .anno-label { font-size:10px; color:#666; font-weight:600; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
+
+  .style-prompt { background:#151515; border:1px solid #333; border-radius:10px; padding:16px; margin:16px 0; }
+  .style-prompt h4 { font-size:13px; color:#fff; margin-bottom:8px; }
+  .style-prompt p { font-size:12px; color:#aaa; line-height:1.8; }
+  .style-prompt .tag { color:#ffcc66; font-weight:600; }
+
+  .footer { text-align:center; color:#555; font-size:12px; padding:24px 0 8px; border-top:1px solid #222; margin-top:20px; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <h1>🎤 三版赛马 · 批注版</h1>
+  <div class="sub">每段歌词右侧可批注修改 · Suno元标签已格式化 · 英文Hiphop</div>
+  <div class="badge">杰少直接在右侧框里写修改意见，我收到后立刻改</div>
+</header>
+
+<div class="nav">
+  <a href="#lysa">A版 · Not Lost · 莎总</a>
+  <a href="#gpt">B版 · Quiet Strength · GPT</a>
+  <a href="#gemini">C版 · The Low Hum · Gemini</a>
+</div>
+
+<!-- ========== VERSION A: LYSA ========== -->
+<div class="version version-a" id="lysa">
+  <div class="version-header">
+    <h2>🎵 A版 · Not Lost</h2>
+    <span class="model-tag">莎总 / Lysa</span>
+  </div>
+
+  <div class="style-prompt">
+    <h4>🎛️ 莎总感觉的风格Prompt</h4>
+    <p><span class="tag">[track: genre: hip-hop, melodic rap, conscious rap, style: cinematic, warm, gospel-influenced, mood: bittersweet hopeful, length: 240]</span><br>
+    <span class="tag">[male: emotional, raw, melodic rap delivery]</span><br>
+    <span class="tag">[instruments: piano, synth bass, 808 drums, gospel choir textures, ambient pad]</span><br>
+    <span class="tag">[tempo: mid-tempo hip-hop groove]</span><br>
+    <span class="tag">[background-vocals: harmonic, layered, gospel choir]</span><br><br>
+    <strong>方向：</strong>方向A·微光励志 — 没有一句"加油"，所有力量感都来自"被爱"本身。Melodic Rap叙事流，Hook用大开口元音/oʊ/（home/alone/whole/soul），福音感和声层叠。Bridge从说唱转chant爆发"I'm not lost / I'm just loved"，私密忏悔室感→Final Chorus大合唱，对比最强。</p>
+  </div>
+
+  <div class="section-row">
+    <div class="lyrics-side">
+      <div class="lyrics-box">
+        <div class="label">Intro · Spoken Word</div>
+        <div class="lines"><span class="tag">[intro | instruments: solo piano, ambient pad, spoken word]</span>
+Yeah... this one's for the ones who never let us fall
+The voice in the static, the light through the wall
+You know who you are.</div>
+      </div>
+    </div>
+    <div class="anno-side">
+      <div class="anno-box">
+        <div class="anno-label">📝 批注 / 修改</div>
+        <textarea placeholder="杰少在这里写修改意见..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-row">
+    <div class="lyrics-side">
+      <div class="lyrics-box">
+        <div class="label">Verse 1 · Rap</div>
+        <div class="lines"><span class="tag">[verse | style: narrative, introspective, vocals: emotional rap delivery]</span>
+They told me toughen up, don't let 'em see you bleed
+Put a mask on, boy, that's what they need
+But late nights when the city sleep, I stare at the ceiling
+Wondering if any of this chasing even got a meaning
+Phone buzzing, notifications screaming my name
+But none of 'em asking if I'm okay, it's all the same
+Pressure building like a storm inside my chest
+Feeling like a puzzle with a piece that won't connect
+Then I hear your voice, not through the phone, through the years
+Saying "run your race, I'll be right here"
+And suddenly the weight don't feel so heavy no more
+'Cause I know there's a harbor waiting on the shore</div>
+      </div>
+    </div>
+    <div class="anno-side">
+      <div class="anno-box">
+        <div class="anno-label">📝 批注 / 修改</div>
+        <textarea placeholder="比如：第3行'chasing'太泛，换个词..."></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-row">
+    <div class="lyrics-side">
+      <div class="lyrics-box">
+        <div class="label">Pre-Chorus · Melodic</div>
+        <div class="lines"><span class="tag">[pre-chorus | style: building tension, vocals: melodic transition]</span>
+When the ground starts shaking and the walls cave in
+When I'm standing at the edge wondering where to begin
+I remember...</div>
+      </div>
+    </div>
+    <div class="anno-side">
+      <div class="anno-box">
+        <div class="anno-label">📝 批注 / 修改</div>
+        <textarea placeholder=""></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-row">
+    <div class="lyrics-side">
+      <div class="lyrics-box">
+        <div class="label">Chorus · Hook (Gospel Feel)</div>
+        <div class="lines"><span class="tag">[chorus | style: anthemic, vocals: powerful emotional belt, instruments: full drums + choir swell]</span>
+Everybody needs someone to call home
+A hand that won't let go when you're out there all alone
+You taught me broken pieces still can make a whole
+Now I walk with heavy gold, 'cause your love is my soul
+<span class="tag">[background-vocals: layered, gospel choir ad-libs]</span>
+Not lost, not lost
+Just loved, just loved</div>
+      </div>
+    </div>
+    <div class="anno-side">
+      <div class="anno-box">
+        <div class="anno-label">📝 批注 / 修改</div>
+        <textarea placeholder="Hook够不够catchy？要不要更短？"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-row">
+    <div class="lyrics-side">
+      <div class="lyrics-box">
+        <div class="label">Verse 2 · Rap</div>
+        <div class="lines"><span class="tag">[verse-2 | style: narrative deepening, vocals: emotional rap delivery]</span>
+Used to think I had to carry it all by myself
+Like asking for help was putting pride up on the shelf
+But you showed me strength ain't about never breaking
+It's about knowing who to call when your hands start shaking
+Every scar I got, you saw it before I did
+Every time I fell, you were praying where I hid
+And I ain't religious but I feel something holy
+When you look at me like I'm somebody worth knowing
+The world wants me harder, colder, meaner, numb
+But your voice in my head says "just come home, son"
+So I keep my head up, not 'cause I'm fearless
+But 'cause I know behind me, your love is the clearest</div>
+      </div>
+    </div>
+    <div class="anno-side">
+      <div class="anno-box">
+        <div class="anno-label">📝 批注 / 修改</div>
+        <textarea placeholder=""></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-row">
+    <div class="lyrics-side">
+      <div class="lyrics-box">
+        <div class="label">Bridge · Build-up & Burst</div>
+        <div class="lines"><span class="tag">[bridge | style: intense, dynamic, vocals: raw emotional burst, instruments: stripped + rebuild]</span>
+I was shattered, scattered on the floor
+You walked in, didn't ask what for
+Just started picking up the parts of me
+Saying "you're not lost, you're just finding where to be"
+And I cried, yeah I broke down in your arms
+No performance, no alarms
+Just a kid who needed somebody to see
+The mess underneath and still believe in me
+I'm not lost, I'm not lost
+I'm just loved, I'm just loved
+At whatever cost</div>
+      </div>
+    </div>
+    <div class="anno-side">
+      <div class="anno-box">
+        <div class="anno-label">📝 批注 / 修改</div>
+        <textarea placeholder="Bridge情绪爆点够不够？"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-row">
+    <div class="lyrics-side">
+      <div class="lyrics-box">
+        <div class="label">Final Chorus · Full Choir</div>
+        <div class="lines"><span class="tag">[final-chorus | style: full anthemic, vocals: soaring + choir, instruments: full orchestra + drums]</span>
+<span class="tag">[background-vocals: full gospel choir, layered harmonies, ad-libs]</span>
+Everybody needs someone to call home
+A hand that won't let go when you're out there all alone
+You taught me broken pieces still can make a whole
+Now I walk with heavy gold, 'cause your love is my soul
+Not lost, not lost
+Just loved, just loved</div>
+      </div>
+    </div>
+    <div class="anno-side">
+      <div class="anno-box">
+        <div class="anno-label">📝 批注 / 修改</div>
+        <textarea placeholder=""></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-row">
+    <div class="lyrics-side">
+      <div class="lyrics-box">
+        <div class="label">Outro · Spoken Fade</div>
+        <div class="lines"><span class="tag">[outro | style: fading, vocals: soft spoken, instruments: piano + vocal echo]</span>
+Yeah... they say it takes somebody to love somebody
+I feel that now
+For everyone who ever held us up...
+This is yours.
+<span class="comment">(fade out with piano + vocal echo)</span></div>
+      </div>
+    </div>
+    <div class="anno-side">
+      <div class="anno-box">
+        <div class="anno-label">📝 批注 / 修改</div>
+        <textarea placeholder=""></textarea>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== VERSION B: GPT ========== -->
+<div class="version version-b" id="gpt">
+  <div class="version-header">
+    <h2>🎵 B版 · Quiet Strength</h2>
+    <span class="model-tag">GPT-4o-mini</span>
+  </div>
+
+  <div class="style-prompt">
+    <h4>🎛️ GPT版风格Prompt</h4>
+    <p><span class="tag">[track: genre: hip-hop, pop rap, style: uplifting, warm, cinematic, mood: hopeful inspiring, length: 240]</span><br>
+    <span class="tag">[male: clear, strong, emotional rap delivery]</span><br>
+    <span class="tag">[instruments: piano, acoustic guitar, live drums, strings, synth pad]</span><br>
+    <span class="tag">[tempo: mid-tempo, steady hip-hop groove]</span><br>
+    <span class="tag">[background-vocals: harmonic, layered, ethereal]</span><br><br>
+    <strong>方向：</strong>偏传统励志说唱，韵脚规整（AABB/CDEE），旋律温暖。"rise above""treasure of gold"等正能量词较多，微光感被稀释。适合主流励志短视频，但方向A的"被爱=不迷路"细腻感稍弱。Hook概念好（quiet strength），但旋律展开空间因韵脚变化多而受限。</p>
+  </div>
+
+  <div class="section-row">
+    <div class="lyrics-side">
+      <div class="lyrics-box">
+        <div class="label">Intro</div>
+        <div class="lines"><span class="tag">[intro | instruments: soft piano, ambient pad, spoken word]</span>
+In the shadows where the whispers dwell,
+There's a light that flickers, but it shines so well.
+Sometimes it's the silence that speaks the loudest.</div>
+      </div>
+    </div>
+    <div class="anno-side">
+      <div class="anno-box">
+        <div class="anno-label">📝 批注 / 修改</div>
+        <textarea placeholder=""></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-row">
+    <div class="lyrics-side">
+      <div class="lyrics-box">
+        <div class="label">Verse 1 · Rap</div>
+        <div class="lines"><span class="tag">[verse | style: reflective, storytelling, vocals: emotional rap]</span>
+I tread through valleys where the shadows loom,
+Doubt's a heavy weight, it fills the room.
+Lost in the noise, where dreams fade fast,
+But I keep my heart close, gotta outlast.
+Walls built high, but I'm learning to climb,
+Every stumble and fall, I'm still in my prime.
+Got a crew that's tight, like stitches on skin,
+They remind me I'm golden, even when I feel thin.
+Life's a puzzle, pieces scattered in the dark,
+But every broken shard ignites a spark.</div>
+      </div>
+    </div>
+    <div class="anno-side">
+      <div class="anno-box">
+        <div class="anno-label">📝 批注 / 修改</div>
+        <textarea placeholder=""></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-row">
+    <div class="lyrics-side">
+      <div class="lyrics-box">
+        <div class="label">Pre-Chorus</div>
+        <div class="lines"><span class="tag">[pre-chorus | style: melodic lift, building energy, vocals: smooth transition]</span>
+In the silence, I breathe, I find my way,
+Strength in the stillness, I'm here to stay.
+Whispers of love like a soft embrace,
+Together we rise, in this sacred space.</div>
+      </div>
+    </div>
+    <div class="anno-side">
+      <div class="anno-box">
+        <div class="anno-label">📝 批注 / 修改</div>
+        <textarea placeholder=""></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-row">
+    <div class="lyrics-side">
+      <div class="lyrics-box">
+        <div class="label">Chorus · Hook</div>
+        <div class="lines"><span class="tag">[chorus | style: anthemic, vocals: powerful + layered harmonies, instruments: full drums + strings]</span>
+We are the light when the world feels dim,
+Holding each other with love from within.
+You're enough, oh, you're more than enough,
+Through the storm and the struggle, we rise above.
+Together we shine, our hearts intertwined,
+In this quiet strength, true peace we find.</div>
+      </div>
+    </div>
+    <div class="anno-side">
+      <div class="anno-box">
+        <div class="anno-label">📝 批注 / 修改</div>
+        <textarea placeholder=""></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-row">
+    <div class="lyrics-side">
+      <div class="lyrics-box">
+        <div class="label">Verse 2 · Rap</div>
+        <div class="lines"><span class="tag">[verse-2 | style: emotional deepening, vocals: raw but controlled rap]</span>
+Now I'm peeling back layers, showing my scars,
+Vulnerability's strength, it's written in stars.
+Fighting battles unseen, but feel the weight lift,
+Love's a gentle force, it's the ultimate gift.
+Every tear I shed, waters the ground,
+From the roots of my soul, new life is found.
+I'm not just a fighter, I'm learning to heal,
+When the night feels heavy, I know it's real.
+With each echoing heartbeat, I rise from the dust,
+In this tapestry of life, it's love that I trust.</div>
+      </div>
+    </div>
+    <div class="anno-side">
+      <div class="anno-box">
+        <div class="anno-label">📝 批注 / 修改</div>
+        <textarea placeholder=""></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-row">
+    <div class="lyrics-side">
+      <div class="lyrics-box">
+        <div class="label">Bridge · Build-up</div>
+        <div class="lines"><span class="tag">[bridge | style: intense chant-like, building, vocals: powerful group energy]</span>
+Here we are, together, in the fray,
+Feel the pulse of love, guiding our way.
+When the night is cold, we'll ignite the flame,
+In this unity, we call each other's name.
+Oh, we're more than the battles, we're stories untold,
+This quiet strength, a treasure of gold.
+Together we rise, let the world see,
+In our harmony, we're truly free.</div>
+      </div>
+    </div>
+    <div class="anno-side">
+      <div class="anno-box">
+        <div class="anno-label">📝 批注 / 修改</div>
+        <textarea placeholder=""></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-row">
+    <div class="lyrics-side">
+      <div class="lyrics-box">
+        <div class="label">Final Chorus · Full Power</div>
+        <div class="lines"><span class="tag">[final-chorus | style: full power, explosive, vocals: choir backing, instruments: full band]</span>
+<span class="tag">[background-vocals: full choir, soaring harmonies]</span>
+We are the light when the world feels dim,
+Holding each other with love from within.
+You're enough, oh, you're more than enough,
+Through the storm and the struggle, we rise above.
+Together we shine, our hearts intertwined,
+In this quiet strength, true peace we find.</div>
+      </div>
+    </div>
+    <div class="anno-side">
+      <div class="anno-box">
+        <div class="anno-label">📝 批注 / 修改</div>
+        <textarea placeholder=""></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-row">
+    <div class="lyrics-side">
+      <div class="lyrics-box">
+        <div class="label">Outro · Fade</div>
+        <div class="lines"><span class="tag">[outro | style: gentle reflective fade, vocals: soft, instruments: piano fade]</span>
+So remember the whispers, let them guide your way,
+You're never alone, in love we'll stay.
+This quiet strength, forever our grace.</div>
+      </div>
+    </div>
+    <div class="anno-side">
+      <div class="anno-box">
+        <div class="anno-label">📝 批注 / 修改</div>
+        <textarea placeholder=""></textarea>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== VERSION C: GEMINI ========== -->
+<div class="version version-c" id="gemini">
+  <div class="version-header">
+    <h2>🎵 C版 · The Low Hum</h2>
+    <span class="model-tag">Gemini-2.5-pro</span>
+  </div>
+
+  <div class="style-prompt">
+    <h4>🎛️ Gemini版风格Prompt</h4>
+    <p><span class="tag">[track: genre: hip-hop, melodic rap, conscious rap, style: cinematic, warm, introspective, mood: bittersweet hopeful, length: 240]</span><br>
+    <span class="tag">[male: emotional, raw, J. Cole-style narrative delivery]</span><br>
+    <span class="tag">[instruments: piano, synth bass, 808 drums, ambient city textures, gospel choir textures]</span><br>
+    <span class="tag">[tempo: mid-tempo, slow-burning hip-hop groove]</span><br>
+    <span class="tag">[background-vocals: harmonic, layered, subtle gospel warmth]</span><br><br>
+    <strong>方向：</strong>方向A契合度最强。J. Cole叙事流，"hired than inspired""cracks in the ceiling"金句级细节密度。"low hum"核心隐喻贯穿全曲——Intro synth note → 贯穿"low hum" → Outro回归synth note，教科书级闭环。Bridge "not about the winnin', it's about the beginnin'"精准捕捉微光感：不是赢，是还在。Verse 2 "You just held the space"心理咨询术语入词，极当代。</p>
+  </div>
+
+  <div class="section-row">
+    <div class="lyrics-side">
+      <div class="lyrics-box">
+        <div class="label">Intro · Spoken</div>
+        <div class="lines"><span class="tag">[intro | instruments: solo piano, distant city ambience, low synth note, spoken word]</span>
+<span class="comment">(Spoken, over faint distant city ambience and a single low synth note)</span>
+The world's so damn loud, you know?
+Everyone's shouting what you're supposed to be.
+Sometimes... you just need one quiet sound to hold onto.</div>
+      </div>
+    </div>
+    <div class="anno-side">
+      <div class="anno-box">
+        <div class="anno-label">📝 批注 / 修改</div>
+        <textarea placeholder=""></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-row">
+    <div class="lyrics-side">
+      <div class="lyrics-box">
+        <div class="label">Verse 1 · Rap</div>
+        <div class="lines"><span class="tag">[verse | style: narrative, introspective, weary grind, vocals: rhythmic storytelling rap]</span>
+Yeah, another sunrise bleeds on the windowsill
+Another climb up a cold and lonely hill
+Got my jaw set tight, my reflection looks tired
+Chasin' a dream that feels more hired than inspired
+The concrete canyons echo with the promises I made
+While the sirens sing the blues of a debt that's gettin' paid
+Shoulders carryin' the weight of a skyline I ain't even build
+Tryna fill a space that the world told me to get filled
+They say "keep your head up," but my neck is sore as hell
+Just one more crack before this whole damn castle fell.</div>
+      </div>
+    </div>
+    <div class="anno-side">
+      <div class="anno-box">
+        <div class="anno-label">📝 批注 / 修改</div>
+        <textarea placeholder=""></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-row">
+    <div class="lyrics-side">
+      <div class="lyrics-box">
+        <div class="label">Pre-Chorus · Melodic</div>
+        <div class="lines"><span class="tag">[pre-chorus | style: melodic lift, clarity moment, vocals: sung transition]</span>
+But then the static breaks, for just a second I see through
+And in the noise, I get a single thought of you
+It ain't a lightning strike, just a flicker in the dark
+A quiet, steady beat that re-ignites the spark.</div>
+      </div>
+    </div>
+    <div class="anno-side">
+      <div class="anno-box">
+        <div class="anno-label">📝 批注 / 修改</div>
+        <textarea placeholder=""></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-row">
+    <div class="lyrics-side">
+      <div class="lyrics-box">
+        <div class="label">Chorus · Hook (Gospel Choir)</div>
+        <div class="lines"><span class="tag">[chorus | style: anthemic, warm gospel choir feel, vocals: soaring + layered harmonies, instruments: drums + piano + choir]</span>
+Oh-oh-oh, I don't need a king's crown
+Just the low hum of your sound
+To know I'm on solid ground
+Oh-oh-oh, it brings me back home
+Makes me know I'm not alone
+Yeah, that's all I need to know.</div>
+      </div>
+    </div>
+    <div class="anno-side">
+      <div class="anno-box">
+        <div class="anno-label">📝 批注 / 修改</div>
+        <textarea placeholder=""></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-row">
+    <div class="lyrics-side">
+      <div class="lyrics-box">
+        <div class="label">Verse 2 · Rap</div>
+        <div class="lines"><span class="tag">[verse-2 | style: emotional deepening, social media critique, vocals: raw introspective rap]</span>
+I see 'em postin' wins, the highlight reels and trophies
+While I'm just countin' cracks in the ceiling, feelin' hopeless
+An imposter in my own skin, wearin' last year's confidence
+Tryna build a fortress out of common sense
+They sell you dreams in a bottle, tell you "man up" and "be strong"
+And you start to believe that showin' hurt is somethin' wrong
+But you never did that, you never bought the paper lies
+You just saw the fractures and the fear behind my eyes
+You didn't offer answers or a five-step master plan
+You just held the space and let me know you understand.</div>
+      </div>
+    </div>
+    <div class="anno-side">
+      <div class="anno-box">
+        <div class="anno-label">📝 批注 / 修改</div>
+        <textarea placeholder=""></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-row">
+    <div class="lyrics-side">
+      <div class="lyrics-box">
+        <div class="label">Bridge · Build-up & Burst</div>
+        <div class="lines"><span class="tag">[bridge | style: stripped, chant-like build, vocals: raw vulnerability, instruments: minimal drums]</span>
+It's not about the winnin'
+It's about the beginnin'
+Of another day... and knowin' you're still in it.
+It's not about the praise
+It's just gettin' through the haze...
+And your voice is the only thing that stays.
+And that's enough...
+Just knowing is enough.</div>
+      </div>
+    </div>
+    <div class="anno-side">
+      <div class="anno-box">
+        <div class="anno-label">📝 批注 / 修改</div>
+        <textarea placeholder=""></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-row">
+    <div class="lyrics-side">
+      <div class="lyrics-box">
+        <div class="label">Final Chorus · Full Power</div>
+        <div class="lines"><span class="tag">[final-chorus | style: full power, explosive, choir vocals swell, instruments: full band + gospel choir]</span>
+<span class="tag">[background-vocals: full gospel choir, ad-libs: "Yeah!", "That's all I need!"]</span>
+Oh-oh-oh, I don't need a king's crown!
+Just the low hum of your sound!
+To know I'm on solid ground!
+Oh-oh-oh, it brings me back home!
+Makes me know I'm not alone!
+Yeah, that's all I need to know!</div>
+      </div>
+    </div>
+    <div class="anno-side">
+      <div class="anno-box">
+        <div class="anno-label">📝 批注 / 修改</div>
+        <textarea placeholder=""></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-row">
+    <div class="lyrics-side">
+      <div class="lyrics-box">
+        <div class="label">Outro · Spoken Fade</div>
+        <div class="lines"><span class="tag">[outro | style: fading, returning to intro synth, vocals: soft spoken, instruments: low synth note fade]</span>
+<span class="comment">(Spoken, as beat fades, leaving only the low synth note from intro)</span>
+The whole world can scream. It doesn't matter.
+I can still hear it...
+...that low hum.</div>
+      </div>
+    </div>
+    <div class="anno-side">
+      <div class="anno-box">
+        <div class="anno-label">📝 批注 / 修改</div>
+        <textarea placeholder=""></textarea>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  莎总(Lysa) · 2026-05-10 · 爱鲨文化音乐总监<br>
+  杰少在右侧批注框里写意见 → 截图发给我 或 直接复制文字发我 → 我立刻改
+</div>
+
+</div>
+</body>
+</html>
