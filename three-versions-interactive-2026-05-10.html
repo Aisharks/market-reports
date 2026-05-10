@@ -8,11 +8,7 @@
   * { margin:0; padding:0; box-sizing:border-box; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background:#0a0a0a; color:#d4d4d4; line-height:1.75; }
   .container { max-width:1200px; margin:0 auto; padding:20px; display:flex; gap:20px; }
-  
-  /* Left: Lyrics content */
   .content-area { flex:1; min-width:0; }
-  
-  /* Right: Annotation panel */
   .anno-panel { width:340px; flex-shrink:0; position:sticky; top:20px; height:calc(100vh - 40px); overflow-y:auto; }
   
   header { text-align:center; padding:20px 0 16px; border-bottom:1px solid #222; margin-bottom:20px; }
@@ -33,12 +29,10 @@
   .nav a { display:block; padding:6px 14px; background:#1a1a1a; border:1px solid #333; border-radius:8px; color:#ccc; text-decoration:none; font-size:12px; font-weight:600; }
   .nav a:hover { background:#222; color:#fff; }
   
-  /* Version styling */
   .version { margin-bottom:40px; }
   .version-header { display:flex; align-items:center; gap:12px; margin-bottom:14px; padding-bottom:10px; border-bottom:2px solid; }
   .version-header h2 { font-size:17px; color:#fff; }
   .version-header .model-tag { font-size:11px; padding:2px 8px; border-radius:4px; font-weight:700; }
-  
   .version-a .version-header { border-color:#ff3366; }
   .version-a .model-tag { background:#ff3366; color:#fff; }
   .version-b .version-header { border-color:#10a37f; }
@@ -46,9 +40,8 @@
   .version-c .version-header { border-color:#4285f4; }
   .version-c .model-tag { background:#4285f4; color:#fff; }
   
-  /* Lyrics section */
   .section { margin-bottom:16px; }
-  .section-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; }
+  .section-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; display:flex; align-items:center; gap:8px; }
   .version-a .section-label { color:#ff6699; }
   .version-b .section-label { color:#3dd9a8; }
   .version-c .section-label { color:#7aaefc; }
@@ -56,30 +49,29 @@
   .lyrics-box { background:#121212; border:1px solid #2a2a2a; border-radius:10px; padding:14px 16px; }
   .lyrics-box .tag-line { font-size:12px; color:#ffcc66; font-weight:600; font-family: 'SF Mono', 'Fira Code', monospace; margin-bottom:8px; }
   .lyrics-box .comment { color:#6a9955; font-style:italic; font-size:12px; margin-bottom:6px; }
-  
-  /* Clickable lyrics lines */
-  .lyrics-box .line { 
-    font-size:13.5px; color:#e8e8e8; 
-    font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace;
-    padding:3px 8px; margin:2px -8px; border-radius:4px;
-    cursor: default; transition:all .15s;
-    position:relative;
-  }
+  .lyrics-box .line { font-size:13.5px; color:#e8e8e8; font-family: 'SF Mono', 'Fira Code', 'Courier New', monospace; padding:3px 8px; margin:2px -8px; border-radius:4px; cursor: default; transition:all .15s; position:relative; }
   .annotate-mode .lyrics-box .line { cursor:pointer; }
   .annotate-mode .lyrics-box .line:hover { background:#1a1a1a; }
-  .annotate-mode .lyrics-box .line:hover::before {
-    content:'✎'; position:absolute; left:-20px; color:#ff3366; font-size:12px;
-  }
-  
-  /* Highlight styles for annotated lines */
+  .annotate-mode .lyrics-box .line:hover::before { content:'✎'; position:absolute; left:-20px; color:#ff3366; font-size:12px; }
   .line.has-annotation { background:#ff336622; border-left:3px solid #ff3366; padding-left:5px; }
   .version-b .line.has-annotation { background:#10a37f22; border-left-color:#10a37f; }
   .version-c .line.has-annotation { background:#4285f422; border-left-color:#4285f4; }
   
-  /* Annotation panel */
+  /* Copy buttons */
+  .btn-copy { background:#1a1a1a; border:1px solid #444; color:#ccc; font-size:10px; padding:2px 8px; border-radius:4px; cursor:pointer; transition:all .2s; white-space:nowrap; }
+  .btn-copy:hover { background:#333; color:#fff; }
+  .btn-copy.copied { background:#10a37f; color:#fff; border-color:#10a37f; }
+  .section-copy-bar { display:flex; justify-content:space-between; align-items:center; margin-top:8px; padding-top:8px; border-top:1px solid #2a2a2a; }
+  .section-copy-bar .copy-hint { font-size:10px; color:#555; }
+  
+  .style-prompt { background:#151515; border:1px solid #333; border-radius:10px; padding:14px; margin:14px 0; }
+  .style-prompt-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; }
+  .style-prompt h4 { font-size:13px; color:#fff; }
+  .style-prompt p { font-size:12px; color:#aaa; line-height:1.8; }
+  .style-prompt .tag { color:#ffcc66; font-weight:600; }
+  
   .anno-panel-inner { background:#151515; border:1px solid #2a2a2a; border-radius:12px; padding:16px; }
   .anno-panel-title { font-size:14px; font-weight:700; color:#fff; margin-bottom:12px; padding-bottom:10px; border-bottom:1px solid #333; }
-  
   .anno-form { margin-bottom:16px; }
   .anno-form .selected-text { background:#1a1a1a; border:1px solid #444; border-radius:8px; padding:10px 12px; font-size:12px; color:#ccc; margin-bottom:10px; min-height:36px; }
   .anno-form .selected-text.empty { color:#666; font-style:italic; }
@@ -88,7 +80,6 @@
   .anno-form .btn-save { width:100%; padding:10px; background:#ff3366; color:#fff; border:none; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; }
   .anno-form .btn-save:hover { background:#ff5588; }
   .anno-form .btn-save:disabled { background:#444; color:#888; cursor:not-allowed; }
-  
   .anno-list { max-height:calc(100vh - 360px); overflow-y:auto; }
   .anno-item { background:#1a1a1a; border:1px solid #333; border-radius:8px; padding:12px; margin-bottom:10px; cursor:pointer; transition:all .15s; }
   .anno-item:hover { background:#222; border-color:#444; }
@@ -98,10 +89,8 @@
   .anno-item .anno-meta { font-size:10px; color:#666; margin-top:6px; }
   .anno-item .btn-delete { float:right; background:none; border:none; color:#666; cursor:pointer; font-size:14px; padding:0; }
   .anno-item .btn-delete:hover { color:#ff3366; }
-  
   .anno-empty { text-align:center; padding:40px 20px; color:#666; font-size:13px; }
   
-  /* Export modal */
   .modal-overlay { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:#000000cc; z-index:1000; align-items:center; justify-content:center; }
   .modal-overlay.show { display:flex; }
   .modal-box { background:#1a1a1a; border:1px solid #444; border-radius:12px; padding:24px; max-width:600px; width:90%; max-height:80vh; }
@@ -110,16 +99,10 @@
   .modal-box .btn-copy { margin-top:12px; padding:10px 20px; background:#ff3366; color:#fff; border:none; border-radius:8px; font-size:13px; font-weight:600; cursor:pointer; }
   .modal-box .btn-close { margin-top:12px; margin-left:8px; padding:10px 20px; background:#333; color:#ccc; border:none; border-radius:8px; font-size:13px; cursor:pointer; }
   
-  .style-prompt { background:#151515; border:1px solid #333; border-radius:10px; padding:14px; margin:14px 0; }
-  .style-prompt h4 { font-size:13px; color:#fff; margin-bottom:8px; }
-  .style-prompt p { font-size:12px; color:#aaa; line-height:1.8; }
-  .style-prompt .tag { color:#ffcc66; font-weight:600; }
-  
-  .footer { text-align:center; color:#555; font-size:12px; padding:20px 0; border-top:1px solid #222; margin-top:20px; }
-  
-  /* Annotate mode indicator */
   .mode-indicator { position:fixed; top:10px; right:10px; background:#ff3366; color:#fff; padding:6px 14px; border-radius:20px; font-size:12px; font-weight:600; z-index:100; display:none; }
   .mode-indicator.show { display:block; }
+  
+  .footer { text-align:center; color:#555; font-size:12px; padding:20px 0; border-top:1px solid #222; margin-top:20px; }
   
   @media (max-width:900px) {
     .container { flex-direction:column; }
@@ -160,7 +143,10 @@
   </div>
 
   <div class="style-prompt">
-    <h4>🎛️ 莎总感觉的风格Prompt</h4>
+    <div class="style-prompt-header">
+      <h4>🎛️ 莎总感觉的风格Prompt</h4>
+      <button class="btn-copy" onclick="copyPrompt('A')">📋 复制Prompt</button>
+    </div>
     <p><span class="tag">[track: genre: hip-hop, melodic rap, conscious rap, style: cinematic, warm, gospel-influenced, mood: bittersweet hopeful, length: 240]</span><br>
     <span class="tag">[male: emotional, raw, melodic rap delivery]</span><br>
     <span class="tag">[instruments: piano, synth bass, 808 drums, gospel choir textures, ambient pad]</span><br>
@@ -170,8 +156,11 @@
   </div>
 
   <div class="section" data-version="A" data-section="intro">
-    <div class="section-label">Intro · Spoken Word</div>
-    <div class="lyrics-box">
+    <div class="section-label">
+      Intro · Spoken Word
+      <button class="btn-copy" onclick="copySection('A','intro')">📋 复制歌词</button>
+    </div>
+    <div class="lyrics-box" id="lyrics-A-intro">
       <div class="tag-line">[intro | instruments: solo piano, ambient pad, spoken word]</div>
       <div class="line" data-v="A" data-sec="intro" data-line="1">Yeah... this one's for the ones who never let us fall</div>
       <div class="line" data-v="A" data-sec="intro" data-line="2">The voice in the static, the light through the wall</div>
@@ -180,8 +169,11 @@
   </div>
 
   <div class="section" data-version="A" data-section="verse1">
-    <div class="section-label">Verse 1 · Rap</div>
-    <div class="lyrics-box">
+    <div class="section-label">
+      Verse 1 · Rap
+      <button class="btn-copy" onclick="copySection('A','verse1')">📋 复制歌词</button>
+    </div>
+    <div class="lyrics-box" id="lyrics-A-verse1">
       <div class="tag-line">[verse | style: narrative, introspective, vocals: emotional rap delivery]</div>
       <div class="line" data-v="A" data-sec="verse1" data-line="1">They told me toughen up, don't let 'em see you bleed</div>
       <div class="line" data-v="A" data-sec="verse1" data-line="2">Put a mask on, boy, that's what they need</div>
@@ -199,8 +191,11 @@
   </div>
 
   <div class="section" data-version="A" data-section="pre1">
-    <div class="section-label">Pre-Chorus · Melodic</div>
-    <div class="lyrics-box">
+    <div class="section-label">
+      Pre-Chorus · Melodic
+      <button class="btn-copy" onclick="copySection('A','pre1')">📋 复制歌词</button>
+    </div>
+    <div class="lyrics-box" id="lyrics-A-pre1">
       <div class="tag-line">[pre-chorus | style: building tension, vocals: melodic transition]</div>
       <div class="line" data-v="A" data-sec="pre1" data-line="1">When the ground starts shaking and the walls cave in</div>
       <div class="line" data-v="A" data-sec="pre1" data-line="2">When I'm standing at the edge wondering where to begin</div>
@@ -209,8 +204,11 @@
   </div>
 
   <div class="section" data-version="A" data-section="chorus1">
-    <div class="section-label">Chorus · Hook (Gospel Feel)</div>
-    <div class="lyrics-box">
+    <div class="section-label">
+      Chorus · Hook (Gospel Feel)
+      <button class="btn-copy" onclick="copySection('A','chorus1')">📋 复制歌词</button>
+    </div>
+    <div class="lyrics-box" id="lyrics-A-chorus1">
       <div class="tag-line">[chorus | style: anthemic, vocals: powerful emotional belt, instruments: full drums + choir swell]</div>
       <div class="line" data-v="A" data-sec="chorus1" data-line="1">Everybody needs someone to call home</div>
       <div class="line" data-v="A" data-sec="chorus1" data-line="2">A hand that won't let go when you're out there all alone</div>
@@ -223,8 +221,11 @@
   </div>
 
   <div class="section" data-version="A" data-section="verse2">
-    <div class="section-label">Verse 2 · Rap</div>
-    <div class="lyrics-box">
+    <div class="section-label">
+      Verse 2 · Rap
+      <button class="btn-copy" onclick="copySection('A','verse2')">📋 复制歌词</button>
+    </div>
+    <div class="lyrics-box" id="lyrics-A-verse2">
       <div class="tag-line">[verse-2 | style: narrative deepening, vocals: emotional rap delivery]</div>
       <div class="line" data-v="A" data-sec="verse2" data-line="1">Used to think I had to carry it all by myself</div>
       <div class="line" data-v="A" data-sec="verse2" data-line="2">Like asking for help was putting pride up on the shelf</div>
@@ -242,8 +243,11 @@
   </div>
 
   <div class="section" data-version="A" data-section="bridge">
-    <div class="section-label">Bridge · Build-up & Burst</div>
-    <div class="lyrics-box">
+    <div class="section-label">
+      Bridge · Build-up & Burst
+      <button class="btn-copy" onclick="copySection('A','bridge')">📋 复制歌词</button>
+    </div>
+    <div class="lyrics-box" id="lyrics-A-bridge">
       <div class="tag-line">[bridge | style: intense, dynamic, vocals: raw emotional burst, instruments: stripped + rebuild]</div>
       <div class="line" data-v="A" data-sec="bridge" data-line="1">I was shattered, scattered on the floor</div>
       <div class="line" data-v="A" data-sec="bridge" data-line="2">You walked in, didn't ask what for</div>
@@ -260,8 +264,11 @@
   </div>
 
   <div class="section" data-version="A" data-section="final">
-    <div class="section-label">Final Chorus · Full Choir</div>
-    <div class="lyrics-box">
+    <div class="section-label">
+      Final Chorus · Full Choir
+      <button class="btn-copy" onclick="copySection('A','final')">📋 复制歌词</button>
+    </div>
+    <div class="lyrics-box" id="lyrics-A-final">
       <div class="tag-line">[final-chorus | style: full anthemic, vocals: soaring + choir, instruments: full orchestra + drums]</div>
       <div class="tag-line">[background-vocals: full gospel choir, layered harmonies, ad-libs]</div>
       <div class="line" data-v="A" data-sec="final" data-line="1">Everybody needs someone to call home</div>
@@ -274,8 +281,11 @@
   </div>
 
   <div class="section" data-version="A" data-section="outro">
-    <div class="section-label">Outro · Spoken Fade</div>
-    <div class="lyrics-box">
+    <div class="section-label">
+      Outro · Spoken Fade
+      <button class="btn-copy" onclick="copySection('A','outro')">📋 复制歌词</button>
+    </div>
+    <div class="lyrics-box" id="lyrics-A-outro">
       <div class="tag-line">[outro | style: fading, vocals: soft spoken, instruments: piano + vocal echo]</div>
       <div class="line" data-v="A" data-sec="outro" data-line="1">Yeah... they say it takes somebody to love somebody</div>
       <div class="line" data-v="A" data-sec="outro" data-line="2">I feel that now</div>
@@ -294,7 +304,10 @@
   </div>
 
   <div class="style-prompt">
-    <h4>🎛️ GPT版风格Prompt</h4>
+    <div class="style-prompt-header">
+      <h4>🎛️ GPT版风格Prompt</h4>
+      <button class="btn-copy" onclick="copyPrompt('B')">📋 复制Prompt</button>
+    </div>
     <p><span class="tag">[track: genre: hip-hop, pop rap, style: uplifting, warm, cinematic, mood: hopeful inspiring, length: 240]</span><br>
     <span class="tag">[male: clear, strong, emotional rap delivery]</span><br>
     <span class="tag">[instruments: piano, acoustic guitar, live drums, strings, synth pad]</span><br>
@@ -304,8 +317,11 @@
   </div>
 
   <div class="section" data-version="B" data-section="intro">
-    <div class="section-label">Intro</div>
-    <div class="lyrics-box">
+    <div class="section-label">
+      Intro
+      <button class="btn-copy" onclick="copySection('B','intro')">📋 复制歌词</button>
+    </div>
+    <div class="lyrics-box" id="lyrics-B-intro">
       <div class="tag-line">[intro | instruments: soft piano, ambient pad, spoken word]</div>
       <div class="line" data-v="B" data-sec="intro" data-line="1">In the shadows where the whispers dwell,</div>
       <div class="line" data-v="B" data-sec="intro" data-line="2">There's a light that flickers, but it shines so well.</div>
@@ -314,8 +330,11 @@
   </div>
 
   <div class="section" data-version="B" data-section="verse1">
-    <div class="section-label">Verse 1 · Rap</div>
-    <div class="lyrics-box">
+    <div class="section-label">
+      Verse 1 · Rap
+      <button class="btn-copy" onclick="copySection('B','verse1')">📋 复制歌词</button>
+    </div>
+    <div class="lyrics-box" id="lyrics-B-verse1">
       <div class="tag-line">[verse | style: reflective, storytelling, vocals: emotional rap]</div>
       <div class="line" data-v="B" data-sec="verse1" data-line="1">I tread through valleys where the shadows loom,</div>
       <div class="line" data-v="B" data-sec="verse1" data-line="2">Doubt's a heavy weight, it fills the room.</div>
@@ -331,8 +350,11 @@
   </div>
 
   <div class="section" data-version="B" data-section="pre1">
-    <div class="section-label">Pre-Chorus</div>
-    <div class="lyrics-box">
+    <div class="section-label">
+      Pre-Chorus
+      <button class="btn-copy" onclick="copySection('B','pre1')">📋 复制歌词</button>
+    </div>
+    <div class="lyrics-box" id="lyrics-B-pre1">
       <div class="tag-line">[pre-chorus | style: melodic lift, building energy, vocals: smooth transition]</div>
       <div class="line" data-v="B" data-sec="pre1" data-line="1">In the silence, I breathe, I find my way,</div>
       <div class="line" data-v="B" data-sec="pre1" data-line="2">Strength in the stillness, I'm here to stay.</div>
@@ -342,8 +364,11 @@
   </div>
 
   <div class="section" data-version="B" data-section="chorus1">
-    <div class="section-label">Chorus · Hook</div>
-    <div class="lyrics-box">
+    <div class="section-label">
+      Chorus · Hook
+      <button class="btn-copy" onclick="copySection('B','chorus1')">📋 复制歌词</button>
+    </div>
+    <div class="lyrics-box" id="lyrics-B-chorus1">
       <div class="tag-line">[chorus | style: anthemic, vocals: powerful + layered harmonies, instruments: full drums + strings]</div>
       <div class="line" data-v="B" data-sec="chorus1" data-line="1">We are the light when the world feels dim,</div>
       <div class="line" data-v="B" data-sec="chorus1" data-line="2">Holding each other with love from within.</div>
@@ -355,8 +380,11 @@
   </div>
 
   <div class="section" data-version="B" data-section="verse2">
-    <div class="section-label">Verse 2 · Rap</div>
-    <div class="lyrics-box">
+    <div class="section-label">
+      Verse 2 · Rap
+      <button class="btn-copy" onclick="copySection('B','verse2')">📋 复制歌词</button>
+    </div>
+    <div class="lyrics-box" id="lyrics-B-verse2">
       <div class="tag-line">[verse-2 | style: emotional deepening, vocals: raw but controlled rap]</div>
       <div class="line" data-v="B" data-sec="verse2" data-line="1">Now I'm peeling back layers, showing my scars,</div>
       <div class="line" data-v="B" data-sec="verse2" data-line="2">Vulnerability's strength, it's written in stars.</div>
@@ -372,8 +400,11 @@
   </div>
 
   <div class="section" data-version="B" data-section="bridge">
-    <div class="section-label">Bridge · Build-up</div>
-    <div class="lyrics-box">
+    <div class="section-label">
+      Bridge · Build-up
+      <button class="btn-copy" onclick="copySection('B','bridge')">📋 复制歌词</button>
+    </div>
+    <div class="lyrics-box" id="lyrics-B-bridge">
       <div class="tag-line">[bridge | style: intense chant-like, building, vocals: powerful group energy]</div>
       <div class="line" data-v="B" data-sec="bridge" data-line="1">Here we are, together, in the fray,</div>
       <div class="line" data-v="B" data-sec="bridge" data-line="2">Feel the pulse of love, guiding our way.</div>
@@ -387,8 +418,11 @@
   </div>
 
   <div class="section" data-version="B" data-section="final">
-    <div class="section-label">Final Chorus · Full Power</div>
-    <div class="lyrics-box">
+    <div class="section-label">
+      Final Chorus · Full Power
+      <button class="btn-copy" onclick="copySection('B','final')">📋 复制歌词</button>
+    </div>
+    <div class="lyrics-box" id="lyrics-B-final">
       <div class="tag-line">[final-chorus | style: full power, explosive, vocals: choir backing, instruments: full band]</div>
       <div class="tag-line">[background-vocals: full choir, soaring harmonies]</div>
       <div class="line" data-v="B" data-sec="final" data-line="1">We are the light when the world feels dim,</div>
@@ -401,8 +435,11 @@
   </div>
 
   <div class="section" data-version="B" data-section="outro">
-    <div class="section-label">Outro · Fade</div>
-    <div class="lyrics-box">
+    <div class="section-label">
+      Outro · Fade
+      <button class="btn-copy" onclick="copySection('B','outro')">📋 复制歌词</button>
+    </div>
+    <div class="lyrics-box" id="lyrics-B-outro">
       <div class="tag-line">[outro | style: gentle reflective fade, vocals: soft, instruments: piano fade]</div>
       <div class="line" data-v="B" data-sec="outro" data-line="1">So remember the whispers, let them guide your way,</div>
       <div class="line" data-v="B" data-sec="outro" data-line="2">You're never alone, in love we'll stay.</div>
@@ -419,7 +456,10 @@
   </div>
 
   <div class="style-prompt">
-    <h4>🎛️ Gemini版风格Prompt</h4>
+    <div class="style-prompt-header">
+      <h4>🎛️ Gemini版风格Prompt</h4>
+      <button class="btn-copy" onclick="copyPrompt('C')">📋 复制Prompt</button>
+    </div>
     <p><span class="tag">[track: genre: hip-hop, melodic rap, conscious rap, style: cinematic, warm, introspective, mood: bittersweet hopeful, length: 240]</span><br>
     <span class="tag">[male: emotional, raw, J. Cole-style narrative delivery]</span><br>
     <span class="tag">[instruments: piano, synth bass, 808 drums, ambient city textures, gospel choir textures]</span><br>
@@ -429,8 +469,11 @@
   </div>
 
   <div class="section" data-version="C" data-section="intro">
-    <div class="section-label">Intro · Spoken</div>
-    <div class="lyrics-box">
+    <div class="section-label">
+      Intro · Spoken
+      <button class="btn-copy" onclick="copySection('C','intro')">📋 复制歌词</button>
+    </div>
+    <div class="lyrics-box" id="lyrics-C-intro">
       <div class="tag-line">[intro | instruments: solo piano, distant city ambience, low synth note, spoken word]</div>
       <div class="comment">(Spoken, over faint distant city ambience and a single low synth note)</div>
       <div class="line" data-v="C" data-sec="intro" data-line="1">The world's so damn loud, you know?</div>
@@ -440,8 +483,11 @@
   </div>
 
   <div class="section" data-version="C" data-section="verse1">
-    <div class="section-label">Verse 1 · Rap</div>
-    <div class="lyrics-box">
+    <div class="section-label">
+      Verse 1 · Rap
+      <button class="btn-copy" onclick="copySection('C','verse1')">📋 复制歌词</button>
+    </div>
+    <div class="lyrics-box" id="lyrics-C-verse1">
       <div class="tag-line">[verse | style: narrative, introspective, weary grind, vocals: rhythmic storytelling rap]</div>
       <div class="line" data-v="C" data-sec="verse1" data-line="1">Yeah, another sunrise bleeds on the windowsill</div>
       <div class="line" data-v="C" data-sec="verse1" data-line="2">Another climb up a cold and lonely hill</div>
@@ -457,8 +503,11 @@
   </div>
 
   <div class="section" data-version="C" data-section="pre1">
-    <div class="section-label">Pre-Chorus · Melodic</div>
-    <div class="lyrics-box">
+    <div class="section-label">
+      Pre-Chorus · Melodic
+      <button class="btn-copy" onclick="copySection('C','pre1')">📋 复制歌词</button>
+    </div>
+    <div class="lyrics-box" id="lyrics-C-pre1">
       <div class="tag-line">[pre-chorus | style: melodic lift, clarity moment, vocals: sung transition]</div>
       <div class="line" data-v="C" data-sec="pre1" data-line="1">But then the static breaks, for just a second I see through</div>
       <div class="line" data-v="C" data-sec="pre1" data-line="2">And in the noise, I get a single thought of you</div>
@@ -468,8 +517,11 @@
   </div>
 
   <div class="section" data-version="C" data-section="chorus1">
-    <div class="section-label">Chorus · Hook (Gospel Choir)</div>
-    <div class="lyrics-box">
+    <div class="section-label">
+      Chorus · Hook (Gospel Choir)
+      <button class="btn-copy" onclick="copySection('C','chorus1')">📋 复制歌词</button>
+    </div>
+    <div class="lyrics-box" id="lyrics-C-chorus1">
       <div class="tag-line">[chorus | style: anthemic, warm gospel choir feel, vocals: soaring + layered harmonies, instruments: drums + piano + choir]</div>
       <div class="line" data-v="C" data-sec="chorus1" data-line="1">Oh-oh-oh, I don't need a king's crown</div>
       <div class="line" data-v="C" data-sec="chorus1" data-line="2">Just the low hum of your sound</div>
@@ -481,8 +533,11 @@
   </div>
 
   <div class="section" data-version="C" data-section="verse2">
-    <div class="section-label">Verse 2 · Rap</div>
-    <div class="lyrics-box">
+    <div class="section-label">
+      Verse 2 · Rap
+      <button class="btn-copy" onclick="copySection('C','verse2')">📋 复制歌词</button>
+    </div>
+    <div class="lyrics-box" id="lyrics-C-verse2">
       <div class="tag-line">[verse-2 | style: emotional deepening, social media critique, vocals: raw introspective rap]</div>
       <div class="line" data-v="C" data-sec="verse2" data-line="1">I see 'em postin' wins, the highlight reels and trophies</div>
       <div class="line" data-v="C" data-sec="verse2" data-line="2">While I'm just countin' cracks in the ceiling, feelin' hopeless</div>
@@ -498,8 +553,11 @@
   </div>
 
   <div class="section" data-version="C" data-section="bridge">
-    <div class="section-label">Bridge · Build-up & Burst</div>
-    <div class="lyrics-box">
+    <div class="section-label">
+      Bridge · Build-up & Burst
+      <button class="btn-copy" onclick="copySection('C','bridge')">📋 复制歌词</button>
+    </div>
+    <div class="lyrics-box" id="lyrics-C-bridge">
       <div class="tag-line">[bridge | style: stripped, chant-like build, vocals: raw vulnerability, instruments: minimal drums]</div>
       <div class="line" data-v="C" data-sec="bridge" data-line="1">It's not about the winnin'</div>
       <div class="line" data-v="C" data-sec="bridge" data-line="2">It's about the beginnin'</div>
@@ -513,8 +571,11 @@
   </div>
 
   <div class="section" data-version="C" data-section="final">
-    <div class="section-label">Final Chorus · Full Power</div>
-    <div class="lyrics-box">
+    <div class="section-label">
+      Final Chorus · Full Power
+      <button class="btn-copy" onclick="copySection('C','final')">📋 复制歌词</button>
+    </div>
+    <div class="lyrics-box" id="lyrics-C-final">
       <div class="tag-line">[final-chorus | style: full power, explosive, choir vocals swell, instruments: full band + gospel choir]</div>
       <div class="tag-line">[background-vocals: full gospel choir, ad-libs: "Yeah!", "That's all I need!"]</div>
       <div class="line" data-v="C" data-sec="final" data-line="1">Oh-oh-oh, I don't need a king's crown!</div>
@@ -527,8 +588,11 @@
   </div>
 
   <div class="section" data-version="C" data-section="outro">
-    <div class="section-label">Outro · Spoken Fade</div>
-    <div class="lyrics-box">
+    <div class="section-label">
+      Outro · Spoken Fade
+      <button class="btn-copy" onclick="copySection('C','outro')">📋 复制歌词</button>
+    </div>
+    <div class="lyrics-box" id="lyrics-C-outro">
       <div class="tag-line">[outro | style: fading, returning to intro synth, vocals: soft spoken, instruments: low synth note fade]</div>
       <div class="comment">(Spoken, as beat fades, leaving only the low synth note from intro)</div>
       <div class="line" data-v="C" data-sec="outro" data-line="1">The whole world can scream. It doesn't matter.</div>
@@ -540,7 +604,7 @@
 
 <div class="footer">
   莎总(Lysa) · 2026-05-10 · 爱鲨文化音乐总监<br>
-  杰少开启批注模式 → 点击歌词任意一句 → 右侧填写修改意见 → 导出复制给我
+  杰少：开启批注模式 → 点击歌词 → 右侧写意见 → 导出复制给我。或直接用「📋 复制歌词」复制单段去Suno测试。
 </div>
 
 </div>
@@ -575,13 +639,72 @@
 </div>
 
 <script>
-// State
+// ====== COPY FUNCTIONS ======
+const prompts = {
+  'A': `[track: genre: hip-hop, melodic rap, conscious rap, style: cinematic, warm, gospel-influenced, mood: bittersweet hopeful, length: 240]
+[male: emotional, raw, melodic rap delivery]
+[instruments: piano, synth bass, 808 drums, gospel choir textures, ambient pad]
+[tempo: mid-tempo hip-hop groove]
+[background-vocals: harmonic, layered, gospel choir]`,
+  'B': `[track: genre: hip-hop, pop rap, style: uplifting, warm, cinematic, mood: hopeful inspiring, length: 240]
+[male: clear, strong, emotional rap delivery]
+[instruments: piano, acoustic guitar, live drums, strings, synth pad]
+[tempo: mid-tempo, steady hip-hop groove]
+[background-vocals: harmonic, layered, ethereal]`,
+  'C': `[track: genre: hip-hop, melodic rap, conscious rap, style: cinematic, warm, introspective, mood: bittersweet hopeful, length: 240]
+[male: emotional, raw, J. Cole-style narrative delivery]
+[instruments: piano, synth bass, 808 drums, ambient city textures, gospel choir textures]
+[tempo: mid-tempo, slow-burning hip-hop groove]
+[background-vocals: harmonic, layered, subtle gospel warmth]`
+};
+
+function copyPrompt(version) {
+  copyToClipboard(prompts[version], event.target);
+}
+
+function copySection(version, section) {
+  const box = document.getElementById(`lyrics-${version}-${section}`);
+  if (!box) return;
+  
+  // Build clean text: tag lines + lyric lines + comments
+  let text = '';
+  box.querySelectorAll('.tag-line, .line, .comment').forEach(el => {
+    text += el.textContent + '\n';
+  });
+  
+  copyToClipboard(text.trim(), event.target);
+}
+
+function copyToClipboard(text, btn) {
+  navigator.clipboard.writeText(text).then(() => {
+    showCopied(btn);
+  }).catch(() => {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    document.body.appendChild(textarea);
+    textarea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textarea);
+    showCopied(btn);
+  });
+}
+
+function showCopied(btn) {
+  const original = btn.textContent;
+  btn.textContent = '✅ 已复制';
+  btn.classList.add('copied');
+  setTimeout(() => {
+    btn.textContent = original;
+    btn.classList.remove('copied');
+  }, 1500);
+}
+
+// ====== ANNOTATION STATE ======
 let annotateMode = false;
 let selectedLine = null;
 let annotations = [];
 let annotationIdCounter = 0;
 
-// Toggle annotate mode
 function toggleAnnotateMode() {
   annotateMode = !annotateMode;
   document.body.classList.toggle('annotate-mode', annotateMode);
@@ -598,18 +721,13 @@ function toggleAnnotateMode() {
   }
 }
 
-// Click on lyric line
 function initLineClicks() {
   document.querySelectorAll('.line').forEach(line => {
     line.addEventListener('click', function(e) {
       if (!annotateMode) return;
-      
-      // Don't re-select if clicking an already selected line
       if (selectedLine === this) return;
       
-      // Clear previous selection highlight
       if (selectedLine) selectedLine.classList.remove('selected-line');
-      
       selectedLine = this;
       this.classList.add('selected-line');
       
@@ -623,7 +741,6 @@ function initLineClicks() {
         'pre1': 'Pre-Chorus', 'chorus1': 'Chorus', 'bridge': 'Bridge',
         'final': 'Final Chorus', 'outro': 'Outro'
       };
-      
       const versionNames = { 'A': 'Not Lost', 'B': 'Quiet Strength', 'C': 'The Low Hum' };
       
       document.getElementById('selectedText').innerHTML = 
@@ -634,13 +751,8 @@ function initLineClicks() {
       document.getElementById('btnSave').disabled = false;
       document.getElementById('annoInput').focus();
       
-      // Check if this line already has annotation
       const existing = annotations.find(a => a.version === version && a.section === section && a.line === lineNum);
-      if (existing) {
-        document.getElementById('annoInput').value = existing.note;
-      } else {
-        document.getElementById('annoInput').value = '';
-      }
+      document.getElementById('annoInput').value = existing ? existing.note : '';
     });
   });
 }
@@ -659,12 +771,14 @@ function saveAnnotation() {
   if (!selectedLine) return;
   
   const note = document.getElementById('annoInput').value.trim();
+  const version = selectedLine.dataset.v;
+  const section = selectedLine.dataset.sec;
+  const lineNum = selectedLine.dataset.line;
+  const text = selectedLine.textContent;
+  
   if (!note) {
-    // If empty note, delete existing annotation if any
     const existingIdx = annotations.findIndex(a => 
-      a.version === selectedLine.dataset.v && 
-      a.section === selectedLine.dataset.sec && 
-      a.line === selectedLine.dataset.line
+      a.version === version && a.section === section && a.line === lineNum
     );
     if (existingIdx >= 0) {
       annotations.splice(existingIdx, 1);
@@ -674,12 +788,6 @@ function saveAnnotation() {
     return;
   }
   
-  const version = selectedLine.dataset.v;
-  const section = selectedLine.dataset.sec;
-  const lineNum = selectedLine.dataset.line;
-  const text = selectedLine.textContent;
-  
-  // Update or add
   const existingIdx = annotations.findIndex(a => 
     a.version === version && a.section === section && a.line === lineNum
   );
@@ -697,8 +805,6 @@ function saveAnnotation() {
   
   selectedLine.classList.add('has-annotation');
   renderAnnotations();
-  
-  // Clear input for next
   document.getElementById('annoInput').value = '';
 }
 
@@ -716,7 +822,6 @@ function renderAnnotations() {
   };
   const versionNames = { 'A': 'Not Lost', 'B': 'Quiet Strength', 'C': 'The Low Hum' };
   
-  // Sort by version then section
   const sorted = [...annotations].sort((a, b) => {
     if (a.version !== b.version) return a.version.localeCompare(b.version);
     const secOrder = ['intro','verse1','pre1','chorus1','verse2','bridge','final','outro'];
@@ -737,9 +842,6 @@ function scrollToLine(version, section, line) {
   const lineEl = document.querySelector(`.line[data-v="${version}"][data-sec="${section}"][data-line="${line}"]`);
   if (lineEl) {
     lineEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    lineEl.style.animation = 'none';
-    lineEl.offsetHeight; // reflow
-    lineEl.style.animation = '';
     lineEl.style.background = '#ff336644';
     setTimeout(() => { lineEl.style.background = ''; }, 1500);
   }
@@ -757,10 +859,7 @@ function deleteAnnotation(id) {
 }
 
 function exportAnnotations() {
-  if (annotations.length === 0) {
-    alert('暂无批注可导出');
-    return;
-  }
+  if (annotations.length === 0) { alert('暂无批注可导出'); return; }
   
   const sectionNames = {
     'intro': 'Intro', 'verse1': 'Verse 1', 'verse2': 'Verse 2',
@@ -769,8 +868,7 @@ function exportAnnotations() {
   };
   const versionNames = { 'A': 'Not Lost', 'B': 'Quiet Strength', 'C': 'The Low Hum' };
   
-  let output = `🎵 三版歌词批注汇总\n`;
-  output += `===================\n\n`;
+  let output = `🎵 三版歌词批注汇总\n===================\n`;
   
   const sorted = [...annotations].sort((a, b) => {
     if (a.version !== b.version) return a.version.localeCompare(b.version);
@@ -782,12 +880,9 @@ function exportAnnotations() {
   sorted.forEach(a => {
     if (a.version !== currentVer) {
       currentVer = a.version;
-      output += `\n【${versionNames[a.version]}】\n`;
-      output += `${'─'.repeat(30)}\n`;
+      output += `\n【${versionNames[a.version]}】\n${'─'.repeat(30)}\n`;
     }
-    output += `\n[${sectionNames[a.section]} · Line ${a.line}]\n`;
-    output += `原文：${a.text}\n`;
-    output += `批注：${a.note}\n`;
+    output += `\n[${sectionNames[a.section]} · Line ${a.line}]\n原文：${a.text}\n批注：${a.note}\n`;
   });
   
   document.getElementById('exportContent').textContent = output;
@@ -799,7 +894,6 @@ function copyExport() {
   navigator.clipboard.writeText(content).then(() => {
     alert('批注已复制到剪贴板，直接粘贴发给我即可');
   }).catch(() => {
-    // Fallback
     const textarea = document.createElement('textarea');
     textarea.value = content;
     document.body.appendChild(textarea);
@@ -824,12 +918,10 @@ function clearAllAnnotations() {
   clearSelection();
 }
 
-// Initialize
 document.addEventListener('DOMContentLoaded', function() {
   initLineClicks();
 });
 
-// Close modal on overlay click
 document.getElementById('exportModal').addEventListener('click', function(e) {
   if (e.target === this) closeExport();
 });
