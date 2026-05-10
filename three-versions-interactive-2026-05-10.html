@@ -140,6 +140,7 @@
   <div class="version-header">
     <h2>🎵 A版 · Not Lost</h2>
     <span class="model-tag">莎总 / Lysa</span>
+    <button class="btn-copy" onclick="copyFullLyrics('A')">📋 复制完整歌词</button>
   </div>
 
   <div class="style-prompt">
@@ -301,6 +302,7 @@
   <div class="version-header">
     <h2>🎵 B版 · Quiet Strength</h2>
     <span class="model-tag">GPT-4o-mini</span>
+    <button class="btn-copy" onclick="copyFullLyrics('B')">📋 复制完整歌词</button>
   </div>
 
   <div class="style-prompt">
@@ -453,6 +455,7 @@
   <div class="version-header">
     <h2>🎵 C版 · The Low Hum</h2>
     <span class="model-tag">Gemini-2.5-pro</span>
+    <button class="btn-copy" onclick="copyFullLyrics('C')">📋 复制完整歌词</button>
   </div>
 
   <div class="style-prompt">
@@ -670,6 +673,27 @@ function copySection(version, section) {
   let text = '';
   box.querySelectorAll('.tag-line, .line, .comment').forEach(el => {
     text += el.textContent + '\n';
+  });
+  
+  copyToClipboard(text.trim(), event.target);
+}
+
+function copyFullLyrics(version) {
+  const versionEl = document.querySelector(`.version-${version.toLowerCase()}`);
+  if (!versionEl) return;
+  
+  let text = '';
+  
+  // Add prompt first
+  text += prompts[version] + '\n\n';
+  
+  // Collect all lyrics boxes
+  const boxes = versionEl.querySelectorAll('.lyrics-box');
+  boxes.forEach(box => {
+    box.querySelectorAll('.tag-line, .line, .comment').forEach(el => {
+      text += el.textContent + '\n';
+    });
+    text += '\n';
   });
   
   copyToClipboard(text.trim(), event.target);
