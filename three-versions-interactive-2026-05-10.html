@@ -150,7 +150,7 @@
     
     <div style="display:flex; gap:8px; margin-bottom:12px; flex-wrap:wrap;">
       <button class="btn-copy" onclick="copyStylePrompt('hiphop')">📋 复制Hiphop版</button>
-      <button class="btn-copy" onclick="copyStylePrompt('reggae')">📋 复制慢雷鬼版</button>
+      <button class="btn-copy" onclick="copyStylePrompt('triphop')">📋 复制Trip-hop版</button>
       <button class="btn-copy" onclick="copyStylePrompt('jazz')">📋 复制爵士版</button>
     </div>
     
@@ -161,12 +161,12 @@
 [tempo: mid-tempo hip-hop groove]
 [background-vocals: harmonic, layered, gospel choir]
     </div>
-    <div id="prompt-reggae" style="display:none">
-[track: genre: reggae, slow reggae, roots reggae, style: laid-back, warm, sun-drenched, island feel, mood: bittersweet hopeful, length: 240]
-[male: warm, soulful, reggae vocal delivery]
-[instruments: electric guitar skank, Hammond organ, deep reggae bass, one-drop rimshot drums, steel drum accents, warm keys]
-[tempo: slow reggae groove, one-drop feel]
-[background-vocals: harmonic, layered, roots choir]
+    <div id="prompt-triphop" style="display:none">
+[track: genre: trip-hop, downtempo, lo-fi hip-hop, style: smoky, dark, atmospheric, nocturnal, vinyl warmth, mood: melancholic brooding, length: 240]
+[female: breathy, ethereal, whispered, Portishead-style vocal]
+[instruments: breakbeat drums, vinyl crackle, Rhodes piano, warm analog synth pad, sub-bass, distant strings, vinyl samples]
+[tempo: slow downtempo groove, trip-hop beat]
+[background-vocals: harmonic, layered, ghostly echo, wordless chant]
     </div>
     <div id="prompt-jazz" style="display:none">
 [track: genre: jazz rap, neo-jazz hip-hop, style: smoky, warm, intimate, late-night lounge, mood: bittersweet hopeful, length: 240]
@@ -176,7 +176,7 @@
 [background-vocals: harmonic, layered, smoky jazz scat]
     </div>
     
-    <p><strong>说明：</strong>同一首《Not Lost》歌词，三种风格适配。Hiphop版是原版骨架；慢雷鬼版把808换成one-drop鼓+吉他skank，情绪更慵懒温暖；爵士版把鼓组换成brushed jazz drums+ walking bass，加入sax和trumpet，情绪更私密深夜感。段落管道覆盖也需要对应调整（见下方）。</p>
+    <p><strong>说明：</strong>同一首《Not Lost》歌词，三种风格适配。Hiphop版是原版骨架；Trip-hop版把808换成breakbeat+vinyl crackle，女声breathy whispered（Portishead式暗黑迷幻），情绪从"城市深夜"变成"地下酒吧凌晨3点"。爵士版把鼓组换成brushed jazz drums+walking bass，加入sax和trumpet，情绪更私密深夜感。段落管道覆盖也需要对应调整。</p>
   </div>
 
   <div class="section" data-version="A" data-section="intro">
@@ -739,21 +739,21 @@ function copyStylePrompt(style) {
 [bridge | style: intense, dynamic, vocals: raw emotional burst, instruments: stripped + rebuild]
 [final-chorus | style: full anthemic, vocals: soaring + choir, instruments: full orchestra + drums]
 [outro | style: fading, vocals: soft spoken, instruments: piano + vocal echo]`;
-  } else if (style === 'reggae') {
-    prompt = `[track: genre: reggae, slow reggae, roots reggae, style: laid-back, warm, sun-drenched, island feel, mood: bittersweet hopeful, length: 240]
-[male: warm, soulful, reggae vocal delivery]
-[instruments: electric guitar skank, Hammond organ, deep reggae bass, one-drop rimshot drums, steel drum accents, warm keys]
-[tempo: slow reggae groove, one-drop feel]
-[background-vocals: harmonic, layered, roots choir]
+  } else if (style === 'triphop') {
+    prompt = `[track: genre: trip-hop, downtempo, lo-fi hip-hop, style: smoky, dark, atmospheric, nocturnal, vinyl warmth, mood: melancholic brooding, length: 240]
+[female: breathy, ethereal, whispered, Portishead-style vocal]
+[instruments: breakbeat drums, vinyl crackle, Rhodes piano, warm analog synth pad, sub-bass, distant strings, vinyl samples]
+[tempo: slow downtempo groove, trip-hop beat]
+[background-vocals: harmonic, layered, ghostly echo, wordless chant]
 
-[intro | instruments: solo guitar skank, warm pad, spoken word]
-[verse | style: laid-back storytelling, vocals: warm reggae delivery]
-[pre-chorus | style: building tension, vocals: melodic lift, instruments: organ swell]
-[chorus | style: anthemic, vocals: soulful reggae belt, instruments: full band + choir]
-[verse-2 | style: narrative deepening, vocals: warm reggae delivery]
-[bridge | style: intense, dynamic, vocals: raw emotional burst, instruments: stripped + rebuild]
-[final-chorus | style: full anthemic, vocals: soaring + choir, instruments: full band + organ]
-[outro | style: fading, vocals: soft spoken, instruments: guitar skank fade]`;
+[intro | instruments: vinyl crackle, distant piano, ambient pad, spoken word]
+[verse | style: intimate whispered storytelling, vocals: breathy ethereal delivery]
+[pre-chorus | style: building tension, vocals: melodic lift, instruments: breakbeat enters]
+[chorus | style: anthemic, vocals: emotional belt over breakbeat, instruments: full trip-hop band + ghostly choir]
+[verse-2 | style: intimate deepening, vocals: breathy ethereal delivery]
+[bridge | style: intense, dynamic, vocals: raw emotional burst, instruments: stripped + strings rebuild]
+[final-chorus | style: full anthemic, vocals: soaring + ghostly choir, instruments: full trip-hop orchestra]
+[outro | style: fading, vocals: whispered, instruments: vinyl crackle + piano fade]`;
   } else if (style === 'jazz') {
     prompt = `[track: genre: jazz rap, neo-jazz hip-hop, style: smoky, warm, intimate, late-night lounge, mood: bittersweet hopeful, length: 240]
 [male: smoky, warm, spoken-sung jazz delivery]
