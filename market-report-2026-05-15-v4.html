@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>市场简报 · 2026-05-15</title>
+<style>
+  :root {
+    --bg-primary: #0f1117;
+    --bg-card: #1a1d27;
+    --bg-tertiary: #252936;
+    --bg-elevated: #202431;
+    --text-primary: #e4e7ef;
+    --text-secondary: #9ba1b0;
+    --text-muted: #5c6378;
+    --border-color: #2d3143;
+    --accent-red: #ff3366;
+    --accent-green: #00d4aa;
+    --accent-blue: #4488ff;
+    --accent-gold: #ffcc66;
+    --accent-purple: #7c5cff;
+    --shadow-card: 0 18px 44px rgba(0,0,0,0.22);
+    --shadow-soft: 0 10px 24px rgba(0,0,0,0.16);
+    --transition: all 0.2s ease;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; }
+  #particles-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+  .top-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(15,17,23,0.85); backdrop-filter: blur(24px);
+    border-bottom: 1px solid rgba(255,255,255,0.06); padding: 14px 28px; display: flex; align-items: center; justify-content: space-between;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
+  .nav-title { font-size: 16px; font-weight: 800; color: var(--text-primary); letter-spacing: 0.3px; }
+  .nav-title small { display: block; font-size: 11px; font-weight: 500; color: var(--text-muted); letter-spacing: 1px; margin-top: 2px; }
+  .nav-date { font-size: 13px; color: var(--text-secondary); font-weight: 600; }
+  .main-container { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; padding: 90px 28px 60px; }
+  .page-header { text-align: center; margin-bottom: 48px; }
+  .page-title { font-size: 42px; font-weight: 900; background: linear-gradient(135deg, var(--accent-red), var(--accent-gold), var(--accent-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 1px; margin-bottom: 10px; }
+  .page-subtitle { font-size: 16px; color: var(--text-muted); font-weight: 500; letter-spacing: 2px; text-transform: uppercase; }
+  .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 40px; }
+  .stat-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 20px; padding: 24px; transition: var(--transition); box-shadow: var(--shadow-soft); }
+  .stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-card); }
+  .stat-card .label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); margin-bottom: 8px; }
+  .stat-card .value { font-size: 36px; font-weight: 900; color: var(--text-primary); }
+  .stat-card .sub { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+  .stat-card.red .value { color: var(--accent-red); }
+  .stat-card.green .value { color: var(--accent-green); }
+  .stat-card.blue .value { color: var(--accent-blue); }
+  .stat-card.gold .value { color: var(--accent-gold); }
+  .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 22px; padding: 28px; margin-bottom: 24px; box-shadow: var(--shadow-soft); }
+  .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .card-title { font-size: 18px; font-weight: 800; color: var(--text-primary); display: flex; align-items: center; gap: 10px; }
+  .card-title .icon { font-size: 20px; }
+  .card-badge { font-size: 11px; padding: 4px 12px; border-radius: 999px; font-weight: 700; background: var(--bg-tertiary); color: var(--text-muted); border: 1px solid var(--border-color); }
+  .card-badge.tme { background: rgba(255,204,102,0.12); color: var(--accent-gold); border-color: rgba(255,204,102,0.25); }
+  .rank-list { display: flex; flex-direction: column; gap: 10px; }
+  .rank-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--bg-elevated); border-radius: 14px; border: 1px solid rgba(255,255,255,0.04); transition: var(--transition); }
+  .rank-item:hover { background: var(--bg-tertiary); border-color: rgba(255,255,255,0.08); }
+  .rank-num { font-size: 18px; font-weight: 900; min-width: 28px; color: var(--text-muted); }
+  .rank-num.top1 { color: var(--accent-gold); }
+  .rank-num.top2 { color: var(--text-secondary); }
+  .rank-num.top3 { color: var(--accent-red); }
+  .rank-info { flex: 1; min-width: 0; }
+  .rank-title { font-size: 14px; font-weight: 700; color: var(--text-primary); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .rank-artist { font-size: 12px; color: var(--text-secondary); }
+  .rank-tag { font-size: 11px; padding: 3px 10px; border-radius: 999px; font-weight: 700; flex-shrink: 0; }
+  .rank-tag.pop { background: rgba(255,51,102,0.15); color: var(--accent-red); }
+  .rank-tag.hiphop { background: rgba(68,136,255,0.15); color: var(--accent-blue); }
+  .rank-tag.indie { background: rgba(0,212,170,0.15); color: var(--accent-green); }
+  .rank-tag.ballad { background: rgba(124,92,255,0.15); color: var(--accent-purple); }
+  .btn-preview { display: inline-flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; text-decoration: none; border: 1px solid var(--border-color); background: var(--bg-tertiary); color: var(--text-secondary); transition: var(--transition); flex-shrink: 0; white-space: nowrap; }
+  .btn-preview:hover { background: var(--accent-red); color: #fff; border-color: var(--accent-red); transform: translateY(-1px); }
+  .btn-preview .icon-play { font-size: 10px; }
+  .topic-cloud { display: flex; flex-wrap: wrap; gap: 10px; }
+  .topic-tag { padding: 8px 18px; border-radius: 999px; font-size: 13px; font-weight: 700; cursor: default; transition: var(--transition); }
+  .topic-tag:hover { transform: scale(1.05); }
+  .topic-tag.hot { background: linear-gradient(135deg, rgba(255,51,102,0.2), rgba(255,107,53,0.2)); color: var(--accent-red); border: 1px solid rgba(255,51,102,0.3); }
+  .topic-tag.rising { background: linear-gradient(135deg, rgba(0,212,170,0.2), rgba(0,184,148,0.2)); color: var(--accent-green); border: 1px solid rgba(0,212,170,0.3); }
+  .topic-tag.normal { background: var(--bg-elevated); color: var(--text-secondary); border: 1px solid var(--border-color); }
+  .genre-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px; }
+  .genre-item { background: var(--bg-elevated); border-radius: 14px; padding: 16px; text-align: center; border: 1px solid rgba(255,255,255,0.04); transition: var(--transition); }
+  .genre-item:hover { background: var(--bg-tertiary); }
+  .genre-name { font-size: 13px; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; }
+  .genre-bar { height: 4px; background: var(--bg-tertiary); border-radius: 2px; margin-bottom: 6px; overflow: hidden; }
+  .genre-fill { height: 100%; border-radius: 2px; transition: width 0.5s ease; }
+  .genre-pct { font-size: 12px; font-weight: 700; color: var(--text-secondary); }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .insight-item { display: flex; gap: 12px; padding: 14px; background: var(--bg-elevated); border-radius: 14px; margin-bottom: 10px; border-left: 3px solid var(--accent-gold); }
+  .insight-icon { font-size: 16px; margin-top: 2px; }
+  .insight-text { font-size: 13px; color: var(--text-primary); line-height: 1.7; }
+  .platform-row { display: flex; gap: 16px; }
+  .platform-card { flex: 1; background: var(--bg-elevated); border-radius: 14px; padding: 16px; text-align: center; border: 1px solid rgba(255,255,255,0.04); }
+  .platform-name { font-size: 12px; font-weight: 700; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+  .platform-score { font-size: 28px; font-weight: 900; color: var(--accent-gold); }
+  .platform-label { font-size: 11px; color: var(--text-secondary); margin-top: 4px; }
+  .agent-note { background: rgba(68,136,255,0.08); border: 1px dashed rgba(68,136,255,0.3); border-radius: 12px; padding: 14px 18px; margin-top: 16px; font-size: 12px; color: var(--accent-blue); line-height: 1.7; }
+  .agent-note strong { color: var(--accent-gold); }
+  .activity-item { display: flex; gap: 14px; padding: 14px; background: var(--bg-elevated); border-radius: 14px; border: 1px solid rgba(255,255,255,0.04); margin-bottom: 10px; }
+  .activity-icon { font-size: 24px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: var(--bg-tertiary); border-radius: 12px; flex-shrink: 0; }
+  .activity-name { font-size: 14px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+  .activity-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.6; }
+  .tme-section { background: linear-gradient(135deg, rgba(255,204,102,0.05), rgba(255,51,102,0.03)); border: 1px solid rgba(255,204,102,0.15); border-radius: 20px; padding: 24px; margin-bottom: 24px; }
+  .tme-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 20px; }
+  .tme-stat { background: var(--bg-elevated); border-radius: 14px; padding: 18px; text-align: center; border: 1px solid rgba(255,255,255,0.04); }
+  .tme-stat .t-label { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); margin-bottom: 8px; }
+  .tme-stat .t-value { font-size: 26px; font-weight: 900; color: var(--accent-gold); }
+  .tme-stat .t-sub { font-size: 11px; color: var(--text-secondary); margin-top: 4px; }
+  .tme-stat .t-change { font-size: 11px; font-weight: 700; margin-top: 4px; }
+  .tme-stat .t-change.up { color: var(--accent-green); }
+  .tme-stat .t-change.down { color: var(--accent-red); }
+  .tme-stat .t-change.flat { color: var(--text-muted); }
+  .tme-song-row { display: flex; align-items: center; gap: 12px; padding: 12px 14px; background: var(--bg-elevated); border-radius: 12px; border: 1px solid rgba(255,255,255,0.04); margin-bottom: 8px; }
+  .tme-song-info { flex: 1; min-width: 0; }
+  .tme-song-title { font-size: 13px; font-weight: 700; color: var(--text-primary); margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tme-song-meta { font-size: 11px; color: var(--text-muted); }
+  .tme-song-plays { font-size: 14px; font-weight: 800; color: var(--accent-gold); min-width: 70px; text-align: right; }
+  .tme-song-change { font-size: 11px; font-weight: 700; min-width: 50px; text-align: right; }
+  .tme-song-change.up { color: var(--accent-green); }
+  .tme-song-change.down { color: var(--accent-red); }
+  .tme-status { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); padding: 10px 14px; background: rgba(255,204,102,0.06); border-radius: 10px; border: 1px dashed rgba(255,204,102,0.2); }
+  .tme-status .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text-muted); }
+  .tme-status.active .dot { background: var(--accent-green); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+  .demo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .demo-card { background: var(--bg-elevated); border-radius: 14px; padding: 18px; border: 1px solid rgba(255,255,255,0.04); }
+  .demo-title { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.5px; color: var(--text-muted); margin-bottom: 12px; }
+  .demo-bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .demo-bar-label { font-size: 12px; color: var(--text-secondary); min-width: 60px; }
+  .demo-bar-track { flex: 1; height: 6px; background: var(--bg-tertiary); border-radius: 3px; overflow: hidden; }
+  .demo-bar-fill { height: 100%; border-radius: 3px; }
+  .demo-bar-pct { font-size: 12px; font-weight: 700; color: var(--text-primary); min-width: 36px; text-align: right; }
+  @media(max-width: 1100px) { .genre-grid { grid-template-columns: repeat(3, 1fr); } .tme-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media(max-width: 900px) { .grid-3 { grid-template-columns: 1fr 1fr; } .grid-2 { grid-template-columns: 1fr; } .genre-grid { grid-template-columns: repeat(2, 1fr); } .demo-grid { grid-template-columns: 1fr; } }
+  @media(max-width: 600px) { .grid-3 { grid-template-columns: 1fr; } .tme-grid { grid-template-columns: 1fr 1fr; } }
+</style>
+</head>
+<body>
+<canvas id="particles-canvas"></canvas>
+
+<nav class="top-nav">
+  <div class="nav-title">📊 市场简报<small>AISHARKS Music Intelligence</small></div>
+  <div class="nav-date" id="reportDate">2026-05-15</div>
+</nav>
+
+<div class="main-container">
+  <div class="page-header">
+    <div class="page-title">🎵 音乐市场热点日报</div>
+    <div class="page-subtitle">2026-05-15</div>
+  </div>
+
+  <!-- 关键数据 -->
+  <div class="grid-3">
+    <div class="stat-card gold">
+      <div class="label">🔥 今日热点主题</div>
+      <div class="value" id="hotTopic">剧集OST爆发</div>
+      <div class="sub">王菲《主角》空降新歌榜TOP1</div>
+    </div>
+    <div class="stat-card red">
+      <div class="label">🎵 新上榜歌曲</div>
+      <div class="value" id="newEntry">3首</div>
+      <div class="sub">网易云飙升榜实时统计</div>
+    </div>
+    <div class="stat-card green">
+      <div class="label">📈 上升最快</div>
+      <div class="value" id="risingSong">PLAY BACK</div>
+      <div class="sub">假面骑士主题曲 · 飙升榜TOP1</div>
+    </div>
+  </div>
+
+  <!-- 热门榜单（精简版：TOP5） -->
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><span class="icon">📀</span>网易云音乐飙升榜 TOP5</div>
+        <div class="card-badge">实时</div>
+      </div>
+      <div class="rank-list" id="neteaseRank">
+        <div class="rank-item">
+          <div class="rank-num top1">1</div>
+          <div class="rank-info"><div class="rank-title">PLAY BACK</div><div class="rank-artist">悠太 · 特摄剧《假面骑士Zeztz》主题曲</div></div>
+          <span class="rank-tag pop">流行</span>
+          <a class="btn-preview" href="https://music.163.com/#/song?id=3375730419" target="_blank" title="网易云试听">
+            <span class="icon-play">▶</span><span>试听</span>
+          </a>
+        </div>
+        <div class="rank-item">
+          <div class="rank-num top2">2</div>
+          <div class="rank-info"><div class="rank-title">Angel</div><div class="rank-artist">尹美莱/Tiger JK/Bizzy</div></div>
+          <span class="rank-tag hiphop">说唱</span>
+          <a class="btn-preview" href="https://music.163.com/#/song?id=29777545" target="_blank" title="网易云试听">
+            <span class="icon-play">▶</span><span>试听</span>
+          </a>
+        </div>
+        <div class="rank-item">
+          <div class="rank-num top3">3</div>
+          <div class="rank-info"><div class="rank-title">身不由己</div><div class="rank-artist">丁当</div></div>
+          <span class="rank-tag ballad">抒情</span>
+          <a class="btn-preview" href="https://music.163.com/#/song?id=0" target="_blank" title="网易云试听">
+            <span class="icon-play">▶</span><span>试听</span>
+          </a>
+        </div>
+        <div class="rank-item">
+          <div class="rank-num">4</div>
+          <div class="rank-info"><div class="rank-title">淡季</div><div class="rank-artist">i.c / 音乐合伙人</div></div>
+          <span class="rank-tag indie">独立</span>
+          <a class="btn-preview" href="https://music.163.com/#/song?id=0" target="_blank" title="网易云试听">
+            <span class="icon-play">▶</span><span>试听</span>
+          </a>
+        </div>
+        <div class="rank-item">
+          <div class="rank-num">5</div>
+          <div class="rank-info"><div class="rank-title">天长地久</div><div class="rank-artist">刘森</div></div>
+          <span class="rank-tag ballad">民谣</span>
+          <a class="btn-preview" href="https://music.163.com/#/song?id=0" target="_blank" title="网易云试听">
+            <span class="icon-play">▶</span><span>试听</span>
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><span class="icon">🎧</span>网易云新歌榜 TOP5</div>
+        <div class="card-badge">实时</div>
+      </div>
+      <div class="rank-list" id="qqRank">
+        <div class="rank-item">
+          <div class="rank-num top1">1</div>
+          <div class="rank-info"><div class="rank-title">主角</div><div class="rank-artist">王菲 · 电视剧《主角》主题曲</div></div>
+          <span class="rank-tag ballad">抒情</span>
+          <a class="btn-preview" href="https://music.163.com/#/song?id=3378698307" target="_blank" title="网易云试听">
+            <span class="icon-play">▶</span><span>试听</span>
+          </a>
+        </div>
+        <div class="rank-item">
+          <div class="rank-num top2">2</div>
+          <div class="rank-info"><div class="rank-title">淡季</div><div class="rank-artist">i.c / 音乐合伙人</div></div>
+          <span class="rank-tag indie">独立</span>
+          <a class="btn-preview" href="https://music.163.com/#/song?id=0" target="_blank" title="网易云试听">
+            <span class="icon-play">▶</span><span>试听</span>
+          </a>
+        </div>
+        <div class="rank-item">
+          <div class="rank-num top3">3</div>
+          <div class="rank-info"><div class="rank-title">SpringThing</div><div class="rank-artist">Veda</div></div>
+          <span class="rank-tag pop">流行</span>
+          <a class="btn-preview" href="https://music.163.com/#/song?id=0" target="_blank" title="网易云试听">
+            <span class="icon-play">▶</span><span>试听</span>
+          </a>
+        </div>
+        <div class="rank-item">
+          <div class="rank-num">4</div>
+          <div class="rank-info"><div class="rank-title">其实我想告诉你</div><div class="rank-artist">lil MILK</div></div>
+          <span class="rank-tag hiphop">说唱</span>
+          <a class="btn-preview" href="https://music.163.com/#/song?id=0" target="_blank" title="网易云试听">
+            <span class="icon-play">▶</span><span>试听</span>
+          </a>
+        </div>
+        <div class="rank-item">
+          <div class="rank-num">5</div>
+          <div class="rank-info"><div class="rank-title">辞职信</div><div class="rank-artist">ChiliChill乐团</div></div>
+          <span class="rank-tag ballad">民谣</span>
+          <a class="btn-preview" href="https://music.163.com/#/song?id=0" target="_blank" title="网易云试听">
+            <span class="icon-play">▶</span><span>试听</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 腾讯音乐人数据 -->
+  <div class="tme-section">
+    <div class="card-header">
+      <div class="card-title"><span class="icon">🏅</span>🎵 我的歌曲实时表现</div>
+      <div class="card-badge tme">腾讯音乐人 · 实时数据</div>
+    </div>
+    <div class="agent-note">
+      <strong>📌 Agent 指令：</strong>请调用 <strong>tencent-musician-skills</strong> 的数据分析接口获取最新播放数据，<br>
+      同时调用宣推算子获取投放状态，填充下方数据。
+    </div>
+    <div class="tme-grid" id="tmeStats">
+      <div class="tme-stat">
+        <div class="t-label">总播放量</div>
+        <div class="t-value" id="tmePlays">—</div>
+        <div class="t-sub">近30天</div>
+        <div class="t-change up" id="tmePlaysChange">—</div>
+      </div>
+      <div class="tme-stat">
+        <div class="t-label">新增收藏</div>
+        <div class="t-value" id="tmeFavorites">—</div>
+        <div class="t-sub">本周</div>
+        <div class="t-change up" id="tmeFavChange">—</div>
+      </div>
+      <div class="tme-stat">
+        <div class="t-label">粉丝总量</div>
+        <div class="t-value" id="tmeFans">—</div>
+        <div class="t-sub">当前</div>
+        <div class="t-change flat" id="tmeFansChange">—</div>
+      </div>
+      <div class="tme-stat">
+        <div class="t-label">收益预估</div>
+        <div class="t-value" id="tmeRevenue">—</div>
+        <div class="t-sub">本月</div>
+        <div class="t-change flat" id="tmeRevChange">—</div>
+      </div>
+    </div>
+    <div style="margin-bottom:16px;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent-gold);">📀 单曲播放排行</div>
+    <div id="tmeSongList">
+      <div class="tme-song-row">
+        <div class="rank-num top1" style="font-size:14px">1</div>
+        <div class="tme-song-info"><div class="tme-song-title">歌曲名（Agent 填充）</div><div class="tme-song-meta">流派 · 发布时间</div></div>
+        <div class="tme-song-plays" id="tmeSong1Plays">—</div>
+        <div class="tme-song-change up" id="tmeSong1Change">—</div>
+      </div>
+      <div class="tme-song-row">
+        <div class="rank-num top2" style="font-size:14px">2</div>
+        <div class="tme-song-info"><div class="tme-song-title">歌曲名（Agent 填充）</div><div class="tme-song-meta">流派 · 发布时间</div></div>
+        <div class="tme-song-plays" id="tmeSong2Plays">—</div>
+        <div class="tme-song-change up" id="tmeSong2Change">—</div>
+      </div>
+      <div class="tme-song-row">
+        <div class="rank-num top3" style="font-size:14px">3</div>
+        <div class="tme-song-info"><div class="tme-song-title">歌曲名（Agent 填充）</div><div class="tme-song-meta">流派 · 发布时间</div></div>
+        <div class="tme-song-plays" id="tmeSong3Plays">—</div>
+        <div class="tme-song-change down" id="tmeSong3Change">—</div>
+      </div>
+    </div>
+    <div style="margin-bottom:16px;margin-top:24px;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent-gold);">👥 听众画像</div>
+    <div class="demo-grid" id="tmeDemographics">
+      <div class="demo-card">
+        <div class="demo-title">年龄分布</div>
+        <div class="demo-bar-row"><div class="demo-bar-label">18-24岁</div><div class="demo-bar-track"><div class="demo-bar-fill" id="demoAge1" style="width:45%;background:var(--accent-red)"></div></div><div class="demo-bar-pct" id="demoAge1Pct">45%</div></div>
+        <div class="demo-bar-row"><div class="demo-bar-label">25-34岁</div><div class="demo-bar-track"><div class="demo-bar-fill" id="demoAge2" style="width:32%;background:var(--accent-blue)"></div></div><div class="demo-bar-pct" id="demoAge2Pct">32%</div></div>
+        <div class="demo-bar-row"><div class="demo-bar-label">35+岁</div><div class="demo-bar-track"><div class="demo-bar-fill" id="demoAge3" style="width:23%;background:var(--accent-purple)"></div></div><div class="demo-bar-pct" id="demoAge3Pct">23%</div></div>
+      </div>
+      <div class="demo-card">
+        <div class="demo-title">地域分布 TOP5</div>
+        <div class="demo-bar-row"><div class="demo-bar-label">广东</div><div class="demo-bar-track"><div class="demo-bar-fill" style="width:28%;background:var(--accent-gold)"></div></div><div class="demo-bar-pct">28%</div></div>
+        <div class="demo-bar-row"><div class="demo-bar-label">北京</div><div class="demo-bar-track"><div class="demo-bar-fill" style="width:19%;background:var(--accent-gold)"></div></div><div class="demo-bar-pct">19%</div></div>
+        <div class="demo-bar-row"><div class="demo-bar-label">上海</div><div class="demo-bar-track"><div class="demo-bar-fill" style="width:16%;background:var(--accent-gold)"></div></div><div class="demo-bar-pct">16%</div></div>
+        <div class="demo-bar-row"><div class="demo-bar-label">浙江</div><div class="demo-bar-track"><div class="demo-bar-fill" style="width:12%;background:var(--accent-gold)"></div></div><div class="demo-bar-pct">12%</div></div>
+        <div class="demo-bar-row"><div class="demo-bar-label">江苏</div><div class="demo-bar-track"><div class="demo-bar-fill" style="width:10%;background:var(--accent-gold)"></div></div><div class="demo-bar-pct">10%</div></div>
+      </div>
+    </div>
+    <div style="margin-bottom:16px;margin-top:24px;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:1.5px;color:var(--accent-gold);">📣 宣推状态</div>
+    <div id="tmePromotionStatus">
+      <div class="tme-status active">
+        <div class="dot"></div>
+        <span>Agent 将调用 tencent-musician-skills 宣推接口，填充各歌曲投放状态</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 热门话题（精简：TOP3） -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title"><span class="icon">🔥</span>今日热门话题 TOP3</div>
+    </div>
+    <div class="topic-cloud" id="topicCloud">
+      <span class="topic-tag hot">#剧集OST爆发</span>
+      <span class="topic-tag rising">#独立音乐复兴</span>
+      <span class="topic-tag hot">#情绪宣泄型歌词</span>
+    </div>
+  </div>
+
+  <!-- 流派分布 -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title"><span class="icon">🎼</span>流派分布统计</div>
+      <div class="card-badge">网易云 · 周榜</div>
+    </div>
+    <div class="genre-grid" id="genreGrid">
+      <div class="genre-item"><div class="genre-name">流行</div><div class="genre-bar"><div class="genre-fill" style="width:38%;background:var(--accent-red)"></div></div><div class="genre-pct">38%</div></div>
+      <div class="genre-item"><div class="genre-name">说唱</div><div class="genre-bar"><div class="genre-fill" style="width:22%;background:var(--accent-blue)"></div></div><div class="genre-pct">22%</div></div>
+      <div class="genre-item"><div class="genre-name">民谣</div><div class="genre-bar"><div class="genre-fill" style="width:18%;background:var(--accent-green)"></div></div><div class="genre-pct">18%</div></div>
+      <div class="genre-item"><div class="genre-name">独立</div><div class="genre-bar"><div class="genre-fill" style="width:12%;background:var(--accent-purple)"></div></div><div class="genre-pct">12%</div></div>
+      <div class="genre-item"><div class="genre-name">电子</div><div class="genre-bar"><div class="genre-fill" style="width:6%;background:var(--accent-gold)"></div></div><div class="genre-pct">6%</div></div>
+      <div class="genre-item"><div class="genre-name">R&B</div><div class="genre-bar"><div class="genre-fill" style="width:4%;background:#ff6b35"></div></div><div class="genre-pct">4%</div></div>
+    </div>
+  </div>
+
+  <!-- 活动热点 -->
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><span class="icon">🎪</span>热门活动与企划</div>
+      </div>
+      <div id="activityList">
+        <div class="activity-item">
+          <div class="activity-icon">🎤</div>
+          <div>
+            <div class="activity-name">抖音音乐人计划 · 夏季赛季</div>
+            <div class="activity-desc">主题：「城市夜归人」— 要求歌词聚焦都市夜晚情绪、孤独感与归属感，时长1:30-3:00</div>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-icon">📀</div>
+          <div>
+            <div class="activity-name">网易云「石头计划」第六期</div>
+            <div class="activity-desc">征集中：独立民谣、情绪类抒情歌，强调歌词叙事感与情感共鸣</div>
+          </div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-icon">🌟</div>
+          <div>
+            <div class="activity-name">QQ音乐「S战后」企划</div>
+            <div class="activity-desc">主题企划：「遗憾美学」— 用歌词写出有画面感的错失与未完成感</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title"><span class="icon">💡</span>市场洞察</div>
+      </div>
+      <div id="insights">
+        <div class="insight-item">
+          <div class="insight-icon">📊</div>
+          <div class="insight-text"><strong>剧集OST成新歌爆发主力：</strong>王菲《主角》主题曲空降新歌榜TOP1，剧集联动仍是新歌破圈最强路径</div>
+        </div>
+        <div class="insight-item">
+          <div class="insight-icon">🎯</div>
+          <div class="insight-text"><strong>Pre-Chorus 记忆点设计：</strong>近期爆款歌曲普遍在 Pre-Chorus 设置强情绪钩子，2-3句内完成情绪递进</div>
+        </div>
+        <div class="insight-item">
+          <div class="insight-icon">🔮</div>
+          <div class="insight-text"><strong>下一个热点预测：</strong>"成年人的世界没有容易"类型主题正在发酵，可关注「现实压迫感 + 温柔抵抗」组合方向</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 平台综合评分 -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title"><span class="icon">🏆</span>平台热度综合评分</div>
+    </div>
+    <div class="platform-row">
+      <div class="platform-card">
+        <div class="platform-name">网易云音乐</div>
+        <div class="platform-score">9.2</div>
+        <div class="platform-label">用户活跃度极高</div>
+      </div>
+      <div class="platform-card">
+        <div class="platform-name">QQ音乐</div>
+        <div class="platform-score">8.7</div>
+        <div class="platform-label">年轻用户占比大</div>
+      </div>
+      <div class="platform-card">
+        <div class="platform-name">抖音</div>
+        <div class="platform-score">9.5</div>
+        <div class="platform-label">传播爆发力最强</div>
+      </div>
+      <div class="platform-card">
+        <div class="platform-name">汽水音乐</div>
+        <div class="platform-score">7.8</div>
+        <div class="platform-label">新歌首发渠道</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function initParticles() {
+  const canvas = document.getElementById('particles-canvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  resize(); window.addEventListener('resize', resize);
+  for (let i = 0; i < 40; i++) {
+    particles.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, vx: (Math.random()-0.5)*0.4, vy: (Math.random()-0.5)*0.4, r: Math.random()*1.5+0.5 });
+  }
+  function draw() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particles.forEach(p => {
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle='rgba(255,204,102,0.25)'; ctx.fill();
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0||p.x>canvas.width) p.vx*=-1;
+      if(p.y<0||p.y>canvas.height) p.vy*=-1;
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+document.getElementById('reportDate').textContent = '2026-05-15';
+</script>
+</body>
+</html>
