@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>市场简报 · 2026-05-15</title>
+<style>
+  :root {
+    --bg-primary: #0f1117;
+    --bg-card: #1a1d27;
+    --bg-tertiary: #252936;
+    --bg-elevated: #202431;
+    --text-primary: #e4e7ef;
+    --text-secondary: #9ba1b0;
+    --text-muted: #5c6378;
+    --border-color: #2d3143;
+    --accent-red: #ff3366;
+    --accent-green: #00d4aa;
+    --accent-blue: #4488ff;
+    --accent-gold: #ffcc66;
+    --accent-purple: #7c5cff;
+    --shadow-card: 0 18px 44px rgba(0,0,0,0.22);
+    --shadow-soft: 0 10px 24px rgba(0,0,0,0.16);
+    --transition: all 0.2s ease;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; }
+  #particles-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
+  .top-nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(15,17,23,0.85); backdrop-filter: blur(24px);
+    border-bottom: 1px solid rgba(255,255,255,0.06); padding: 14px 28px; display: flex; align-items: center; justify-content: space-between;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
+  .nav-title { font-size: 16px; font-weight: 800; color: var(--text-primary); letter-spacing: 0.3px; }
+  .nav-title small { display: block; font-size: 11px; font-weight: 500; color: var(--text-muted); letter-spacing: 1px; margin-top: 2px; }
+  .nav-date { font-size: 13px; color: var(--text-secondary); font-weight: 600; }
+  .main-container { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 90px 28px 60px; }
+  .page-header { text-align: center; margin-bottom: 40px; }
+  .page-title { font-size: 40px; font-weight: 900; background: linear-gradient(135deg, var(--accent-red), var(--accent-gold), var(--accent-blue)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 1px; margin-bottom: 10px; }
+  .page-subtitle { font-size: 14px; color: var(--text-muted); font-weight: 500; letter-spacing: 2px; text-transform: uppercase; }
+  .card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 22px; padding: 28px; margin-bottom: 24px; box-shadow: var(--shadow-soft); }
+  .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .card-title { font-size: 18px; font-weight: 800; color: var(--text-primary); display: flex; align-items: center; gap: 10px; }
+  .card-title .icon { font-size: 20px; }
+  .card-badge { font-size: 11px; padding: 4px 12px; border-radius: 999px; font-weight: 700; background: var(--bg-tertiary); color: var(--text-muted); border: 1px solid var(--border-color); }
+  .card-badge.tme { background: rgba(255,204,102,0.12); color: var(--accent-gold); border-color: rgba(255,204,102,0.25); }
+  .section-label { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 1.8px; color: var(--accent-gold); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .rank-list { display: flex; flex-direction: column; gap: 12px; }
+  .rank-item { display: flex; align-items: flex-start; gap: 12px; padding: 16px 18px; background: var(--bg-elevated); border-radius: 16px; border: 1px solid rgba(255,255,255,0.04); transition: var(--transition); }
+  .rank-item:hover { background: var(--bg-tertiary); border-color: rgba(255,255,255,0.08); }
+  .rank-num { font-size: 20px; font-weight: 900; min-width: 32px; color: var(--text-muted); line-height: 1.2; }
+  .rank-num.top1 { color: var(--accent-gold); }
+  .rank-num.top2 { color: #c0c0c0; }
+  .rank-num.top3 { color: #cd7f32; }
+  .rank-body { flex: 1; min-width: 0; }
+  .rank-title { font-size: 15px; font-weight: 700; color: var(--text-primary); margin-bottom: 3px; }
+  .rank-artist { font-size: 12px; color: var(--text-secondary); margin-bottom: 6px; }
+  .rank-analysis { font-size: 12px; color: var(--text-muted); line-height: 1.6; background: var(--bg-tertiary); border-radius: 8px; padding: 8px 10px; }
+  .rank-analysis strong { color: var(--accent-green); }
+  .rank-tag { font-size: 11px; padding: 3px 10px; border-radius: 999px; font-weight: 700; flex-shrink: 0; }
+  .rank-tag.pop { background: rgba(255,51,102,0.15); color: var(--accent-red); }
+  .rank-tag.hiphop { background: rgba(68,136,255,0.15); color: var(--accent-blue); }
+  .rank-tag.indie { background: rgba(0,212,170,0.15); color: var(--accent-green); }
+  .rank-tag.ballad { background: rgba(124,92,255,0.15); color: var(--accent-purple); }
+  .rank-tag.rnb { background: rgba(255,204,102,0.15); color: var(--accent-gold); }
+  .btn-preview { display: inline-flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 8px; font-size: 11px; font-weight: 700; text-decoration: none; border: 1px solid var(--border-color); background: var(--bg-tertiary); color: var(--text-secondary); transition: var(--transition); flex-shrink: 0; white-space: nowrap; }
+  .btn-preview:hover { background: var(--accent-red); color: #fff; border-color: var(--accent-red); transform: translateY(-1px); }
+  .btn-preview .icon-play { font-size: 10px; }
+  /* Topics */
+  .topic-card { background: var(--bg-elevated); border-radius: 16px; padding: 20px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.04); }
+  .topic-card:last-child { margin-bottom: 0; }
+  .topic-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .topic-num { font-size: 13px; font-weight: 900; color: var(--accent-gold); background: rgba(255,204,102,0.15); padding: 3px 10px; border-radius: 999px; }
+  .topic-title { font-size: 15px; font-weight: 800; color: var(--text-primary); }
+  .topic-analysis { font-size: 12px; color: var(--text-muted); line-height: 1.8; }
+  .topic-analysis p { margin-bottom: 5px; }
+  .topic-analysis p:last-child { margin-bottom: 0; }
+  .topic-analysis strong { color: var(--accent-green); }
+  /* TME section */
+  .tme-section { background: linear-gradient(135deg, rgba(255,204,102,0.05), rgba(255,51,102,0.03)); border: 1px solid rgba(255,204,102,0.15); border-radius: 20px; padding: 24px; margin-bottom: 24px; }
+  .tme-section .card-title { color: var(--accent-gold); }
+  .tme-fail { display: flex; align-items: flex-start; gap: 12px; padding: 16px 18px; background: rgba(255,51,102,0.06); border: 1px dashed rgba(255,51,102,0.25); border-radius: 12px; }
+  .tme-fail .icon { font-size: 20px; }
+  .tme-fail-text { font-size: 13px; color: var(--text-secondary); line-height: 1.7; }
+  .tme-fail-text strong { color: var(--accent-red); }
+  /* Activities */
+  .activity-item { display: flex; gap: 14px; padding: 16px; background: var(--bg-elevated); border-radius: 14px; border: 1px solid rgba(255,255,255,0.04); margin-bottom: 12px; }
+  .activity-item:last-child { margin-bottom: 0; }
+  .activity-icon { font-size: 24px; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; background: var(--bg-tertiary); border-radius: 12px; flex-shrink: 0; }
+  .activity-name { font-size: 14px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+  .activity-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.6; margin-bottom: 6px; }
+  .activity-link { font-size: 11px; color: var(--accent-blue); text-decoration: none; }
+  .activity-link:hover { text-decoration: underline; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  @media(max-width: 900px) { .grid-2 { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+<canvas id="particles-canvas"></canvas>
+
+<nav class="top-nav">
+  <div class="nav-title">📊 市场简报<small>AISHARKS Music Intelligence</small></div>
+  <div class="nav-date">2026-05-15</div>
+</nav>
+
+<div class="main-container">
+  <div class="page-header">
+    <div class="page-title">🎵 音乐市场热点日报</div>
+    <div class="page-subtitle">市场简报 v2 · 2026-05-15</div>
+  </div>
+
+  <!-- 网易云热榜 TOP5 -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title"><span class="icon">📀</span>网易云音乐热榜 TOP5</div>
+      <div class="card-badge">实时</div>
+    </div>
+    <div class="rank-list">
+
+      <div class="rank-item">
+        <div class="rank-num top1">1</div>
+        <div class="rank-body">
+          <div class="rank-title">三拜的川菜</div>
+          <div class="rank-artist">CCNB</div>
+          <div class="rank-analysis">
+            <strong>好在哪里：</strong>洗脑旋律搭配"红油泼溅"的视觉化歌词，将川菜的麻辣层层递进，听一次就在脑中循环。歌词叙事感强，场景感十足，朗朗上口。<br>
+            <strong>上榜原因：</strong>抖音二创生态旺盛，无数厨房题材短视频以此为BGM，形成病毒式传播；方言式的副歌hook让歌曲有强烈辨识度。
+          </div>
+        </div>
+        <span class="rank-tag pop">流行</span>
+        <a class="btn-preview" href="https://music.163.com/#/song?id=2457896308" target="_blank" title="网易云试听"><span class="icon-play">▶</span>试听</a>
+      </div>
+
+      <div class="rank-item">
+        <div class="rank-num top2">2</div>
+        <div class="rank-body">
+          <div class="rank-title">可能会出现在</div>
+          <div class="rank-artist">Bidu</div>
+          <div class="rank-analysis">
+            <strong>好在哪里：</strong>Indie pop 底色融合梦幻感编曲，旋律轻柔但有记忆点，歌词以"可能会出现在…"的句式营造出日常诗意，适合深夜独处时播放。<br>
+            <strong>上榜原因：</strong>歌词内容契合当下年轻人"日常孤独感"的情绪共鸣点，小红书/微博大量用户自发分享歌词截图，带动搜索流量飙升。
+          </div>
+        </div>
+        <span class="rank-tag indie">独立</span>
+        <a class="btn-preview" href="https://music.163.com/#/song?id=2447364911" target="_blank" title="网易云试听"><span class="icon-play">▶</span>试听</a>
+      </div>
+
+      <div class="rank-item">
+        <div class="rank-num top3">3</div>
+        <div class="rank-body">
+          <div class="rank-title">APT.</div>
+          <div class="rank-artist">ROSE & Bruno Mars</div>
+          <div class="rank-analysis">
+            <strong>好在哪里：</strong>K-Pop × Pop × Funk 混血风格，节奏型极强，ROSE 的声线与 Bruno Mars 的复古味形成对撞，录音室版和现场版双版本出圈。<br>
+            <strong>上榜原因：</strong>跨国合作自带话题流量；APT. 这个酒吧游戏本身就是社交货币，抖音/小红书大量素人翻唱挑战推动热度持续。
+          </div>
+        </div>
+        <span class="rank-tag pop">流行</span>
+        <a class="btn-preview" href="https://music.163.com/#/song?id=2158326370" target="_blank" title="网易云试听"><span class="icon-play">▶</span>试听</a>
+      </div>
+
+      <div class="rank-item">
+        <div class="rank-num">4</div>
+        <div class="rank-body">
+          <div class="rank-title">生活因你而火热</div>
+          <div class="rank-artist">新裤子乐队</div>
+          <div class="rank-analysis">
+            <strong>好在哪里：</strong>Indie Rock 编制搭配直白有力的歌词，"没有理想的人不伤心"的呐喊感与当下就业/生活压力形成共振，副歌hook记忆点极强。<br>
+            <strong>上榜原因：</strong>近期播客/视频号大量引用这首歌作为"普通人的BGM"，形成情绪出口；乐队巡演持续加热，带动老歌回温。
+          </div>
+        </div>
+        <span class="rank-tag indie">独立</span>
+        <a class="btn-preview" href="https://music.163.com/#/song?id=1902492110" target="_blank" title="网易云试听"><span class="icon-play">▶</span>试听</a>
+      </div>
+
+      <div class="rank-item">
+        <div class="rank-num">5</div>
+        <div class="rank-body">
+          <div class="rank-title">我爱我的民族风</div>
+          <div class="rank-artist">Ketchup</div>
+          <div class="rank-analysis">
+            <strong>好在哪里：</strong>将民族音乐元素（彝族/藏族等）用现代电子节拍重新包装，形成强烈的"反差萌"效果；歌词诙谐有趣，适合短视频翻拍。<br>
+            <strong>上榜原因：</strong>2025年"新中式"审美趋势的代表性曲目；小红书大量"变装+民族风BGM"内容带动搜索量和播放量双升。
+          </div>
+        </div>
+        <span class="rank-tag rnb">融合</span>
+        <a class="btn-preview" href="https://music.163.com/#/song?id=2444086035" target="_blank" title="网易云试听"><span class="icon-play">▶</span>试听</a>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 抖音热歌榜 TOP5 -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title"><span class="icon">🎧</span>抖音热歌榜 TOP5（近期热点）</div>
+      <div class="card-badge">实时</div>
+    </div>
+    <div class="rank-list">
+
+      <div class="rank-item">
+        <div class="rank-num top1">1</div>
+        <div class="rank-body">
+          <div class="rank-title">三拜的川菜</div>
+          <div class="rank-artist">CCNB</div>
+          <div class="rank-analysis">抖音原声使用量超500万，厨房/美食类内容第一BGM，热度从3月延续至今仍在发酵。</div>
+        </div>
+        <span class="rank-tag pop">流行</span>
+      </div>
+
+      <div class="rank-item">
+        <div class="rank-num top2">2</div>
+        <div class="rank-body">
+          <div class="rank-title">APT.</div>
+          <div class="rank-artist">ROSE & Bruno Mars</div>
+          <div class="rank-analysis">跨平台顶流，#APTchallenge 全球 TikTok 参与量破亿，国内抖音翻唱挑战仍处于二次爆发期。</div>
+        </div>
+        <span class="rank-tag pop">流行</span>
+      </div>
+
+      <div class="rank-item">
+        <div class="rank-num top3">3</div>
+        <div class="rank-body">
+          <div class="rank-title">我的纸飞机 2025 Remix</div>
+          <div class="rank-artist">果汁分我一半 / 十三扩</div>
+          <div class="rank-analysis">童声旋律成人情绪的反差感持续出圈，"纸飞机"意象在毕业季内容的加持下爆发，长尾效应明显。</div>
+        </div>
+        <span class="rank-tag ballad">民谣</span>
+      </div>
+
+      <div class="rank-item">
+        <div class="rank-num">4</div>
+        <div class="rank-body">
+          <div class="rank-title">可能会出现在</div>
+          <div class="rank-artist">Bidu</div>
+          <div class="rank-analysis">Indie 质感在短视频平台突围，歌词截图成为小红书高转评内容，带动网易云和QQ音乐双向引流。</div>
+        </div>
+        <span class="rank-tag indie">独立</span>
+      </div>
+
+      <div class="rank-item">
+        <div class="rank-num">5</div>
+        <div class="rank-body">
+          <div class="rank-title">生活因你而火热</div>
+          <div class="rank-artist">新裤子乐队</div>
+          <div class="rank-analysis">"没有理想的人不伤心"成为2025年打工人情绪主题曲，播客/视频号疯狂转发，带起老粉+新粉双向破圈。</div>
+        </div>
+        <span class="rank-tag indie">独立</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- TME 歌曲实时数据 -->
+  <div class="tme-section">
+    <div class="card-header">
+      <div class="card-title"><span class="icon">🏅</span>🎵 我的歌曲实时表现（腾讯音乐人）</div>
+      <div class="card-badge tme">腾讯音乐人 · 实时数据</div>
+    </div>
+    <div class="tme-fail">
+      <div class="icon">⚠️</div>
+      <div class="tme-fail-text">
+        <strong>TME 数据获取失败，接口状态：账号近7天数据不足100，无法生成账号级统计报告。</strong><br>
+        原因：账号尚未积累足够的播放数据量（需近7天累计100次以上播放）。建议持续发行歌曲并积累自然流量后，数据分析功能将自动解锁。
+      </div>
+    </div>
+  </div>
+
+  <!-- 今日热门话题 TOP3 -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title"><span class="icon">🔥</span>今日热门话题 TOP3（创作者视角）</div>
+    </div>
+
+    <div class="topic-card">
+      <div class="topic-header">
+        <span class="topic-num">TOP 1</span>
+        <span class="topic-title">#成年人的崩溃与修复</span>
+      </div>
+      <div class="topic-analysis">
+        <p><strong>为什么好：</strong>这个话题覆盖"崩溃→消化→重建"的完整情绪弧线，精准命中当下25-35岁主力听众的生存状态——他们白天是体面的大人，深夜才是真实的自己。情绪张力巨大，歌词有代入感。</p>
+        <p><strong>怎么切入写歌：</strong>建议从"深夜独处时的独白"场景切入，用"第二人称对话"（你/我）来拉近听众距离；Pre-Chorus 设置情绪高点，主歌克制叙事，副歌释放。</p>
+        <p><strong>具体建议：</strong>可以写"洗手间里关灯的三分钟"这种具体到毫厘的场景细节，比写"我很累"更有画面感和共情力。</p>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <div class="topic-header">
+        <span class="topic-num">TOP 2</span>
+        <span class="topic-title">#城市孤独感（都市隐居族）</span>
+      </div>
+      <div class="topic-analysis">
+        <p><strong>为什么好：</strong>"一个人住""一个人吃外卖""一个人去医院"——这些都市隐居族的日常细节，正在成为2025年最强的情绪共鸣点。它比"深夜emo"更持久、比"孤独"更具体，有大量可展开的生活场景素材。</p>
+        <p><strong>怎么切入写歌：</strong>建议用"物件视角"代替"第一人称独白"：写"外卖只点一份""养了植物叫小绿""冰箱灯永远不灭"——用生活物件承载情绪，比直说"我孤独"高级十倍。</p>
+        <p><strong>具体建议：</strong>结尾可以有一个小小的"出口"——比如"但阳台上的花，今天开了一朵"，用微小确幸收尾，不要纯崩溃。</p>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <div class="topic-header">
+        <span class="topic-num">TOP 3</span>
+        <span class="topic-title">#新中式美学（传统元素现代化）</span>
+      </div>
+      <div class="topic-analysis">
+        <p><strong>为什么好：</strong>国风/传统元素正在从"古风"这一个窄品类里扩张，变成"新中式"——它可以是民乐采样+电子节拍，可以是方言+现代叙事，可以是古诗词意象+当代情感。这是一个正在快速扩张的品类红利期。</p>
+        <p><strong>怎么切入写歌：</strong>不要做"伪古风"（堆砌意象），要做"内核现代、外壳中式"——用现代人的情感困境，但借用传统美学符号（节气、山水、花木）作为意境载体。</p>
+        <p><strong>具体建议：</strong>可以融合家乡方言元素，乡愁+新中式是一个很稀缺但很打人的组合——"普通话里的乡愁，方言里的现在"。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 可参加的活动 -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-title"><span class="icon">🎪</span>可报名参加的创作活动</div>
+    </div>
+    <div class="activity-item">
+      <div class="activity-icon">🤖</div>
+      <div>
+        <div class="activity-name">腾讯音乐「AI音乐新声计划」</div>
+        <div class="activity-desc">鼓励 AI 辅助音乐创作，征集中：AI生成旋律 + 人类填词/AI辅助编曲作品，面向全体音乐人开放，获奖作品可获官方流量扶持。</div>
+        <a class="activity-link" href="https://y.tencentmusic.com/" target="_blank">https://y.tencentmusic.com/ → 查看活动详情</a>
+      </div>
+    </div>
+    <div class="activity-item">
+      <div class="activity-icon">🎤</div>
+      <div>
+        <div class="activity-name">网易云「石头计划」第六期</div>
+        <div class="activity-desc">独立民谣、情绪类抒情歌征集，强调歌词叙事感与情感共鸣；入围者可获得官方歌单推荐 + 巡演机会支持。</div>
+        <a class="activity-link" href="https://music.163.com/st/ad-song" target="_blank">https://music.163.com/st/ad-song → 网易云创作中心</a>
+      </div>
+    </div>
+    <div class="activity-item">
+      <div class="activity-icon">✍️</div>
+      <div>
+        <div class="activity-name">QQ音乐「作诗人计划」歌词征集</div>
+        <div class="activity-desc">长期歌词征集活动，主题不限；优秀歌词作品将获得专业作曲家谱曲 + 制作发行机会，优秀者可参与「Q音制作人」培训。</div>
+        <a class="activity-link" href="https://y.qq.com/n/rym/song" target="_blank">https://y.qq.com → QQ音乐创作人计划</a>
+      </div>
+    </div>
+    <div class="activity-item">
+      <div class="activity-icon">🌟</div>
+      <div>
+        <div class="activity-name">抖音「看见音乐计划」夏季赛季</div>
+        <div class="activity-desc">主题：「城市夜归人」——聚焦都市夜晚情绪、孤独感与归属感，时长1:30-3:00；获奖作品获得抖音首页推荐资源。</div>
+        <a class="activity-link" href="https://www.douyin.com/creator/music" target="_blank">https://www.douyin.com/creator/music → 抖音创作服务平台</a>
+      </div>
+    </div>
+    <div class="activity-item">
+      <div class="activity-icon">🏠</div>
+      <div>
+        <div class="activity-name">Bilibili × QQ音乐「原创音乐联盟」征曲</div>
+        <div class="activity-desc">面向B站 UP 主和独立音乐人的联合征曲企划，风格不限但优先有"故事感"的曲目——要求歌词有画面感、有具体场景、有情绪张力。</div>
+        <a class="activity-link" href="https://music.bilibili.com/" target="_blank">https://music.bilibili.com/ → B站音乐创作</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function initParticles() {
+  const canvas = document.getElementById('particles-canvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  resize(); window.addEventListener('resize', resize);
+  for (let i = 0; i < 40; i++) {
+    particles.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, vx: (Math.random()-0.5)*0.4, vy: (Math.random()-0.5)*0.4, r: Math.random()*1.5+0.5 });
+  }
+  function draw() {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    particles.forEach(p => {
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle='rgba(255,204,102,0.25)'; ctx.fill();
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0||p.x>canvas.width) p.vx*=-1;
+      if(p.y<0||p.y>canvas.height) p.vy*=-1;
+    });
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+</body>
+</html>
