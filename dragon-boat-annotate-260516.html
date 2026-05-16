@@ -167,6 +167,37 @@
   .annotate-mode .line:hover, .annotate-mode .line-text:hover { background: rgba(255,51,102,0.1); border-radius: 6px; }
   .annotate-mode .line:hover::before, .annotate-mode .line-text:hover::before { content: '✎'; position: absolute; left: -24px; color: var(--accent-a); font-size: 14px; animation: bounce 0.5s infinite alternate; }
   @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-3px); } }
+
+  .inline-anno-wrap { margin: 4px 0 12px 16px; animation: slideDown 0.2s ease; }
+  @keyframes slideDown { from { opacity:0; transform:translateY(-6px); } to { opacity:1; transform:translateY(0); } }
+  .inline-anno {
+    background: linear-gradient(135deg, rgba(255,51,102,0.12), rgba(255,107,53,0.06));
+    border: 1px solid rgba(255,51,102,0.28);
+    border-radius: 12px;
+    padding: 12px 14px;
+  }
+  .inline-anno-tag { font-size: 10px; color: #ff3366; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 6px; }
+  .inline-note { font-size: 13px; color: #e4e7ef; line-height: 1.7; margin-bottom: 10px; }
+  .inline-anno-form { display: flex; flex-direction: column; gap: 8px; }
+  .inline-anno-form textarea {
+    background: rgba(0,0,0,0.35);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    color: #e4e7ef;
+    font-size: 13px;
+    padding: 8px 10px;
+    resize: none;
+    font-family: inherit;
+    width: 100%;
+    min-height: 56px;
+  }
+  .inline-anno-form textarea:focus { outline: none; border-color: rgba(255,51,102,0.5); }
+  .inline-anno-actions { display: flex; gap: 8px; }
+  .btn-save-inline { padding: 7px 16px; border-radius: 8px; border: none; background: #ff3366; color: #fff; font-size: 12px; font-weight: 700; cursor: pointer; }
+  .btn-cancel-inline { padding: 7px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: transparent; color: #9ba1b0; font-size: 12px; font-weight: 700; cursor: pointer; }
+  .line.has-inline-anno { background: rgba(255,51,102,0.12) !important; border-radius: 8px; }
+  .line-text.has-inline-anno { color: #ff9ab3; }
+
   .line.has-annotation, .line-text.has-annotation { background: rgba(255,51,102,0.15) !important; border-left: 3px solid var(--accent-a); padding-left: 9px !important; border-radius: 6px; display: block; }
   .version-b .line.has-annotation, .version-b .line-text.has-annotation { background: rgba(0,212,170,0.15) !important; border-left-color: var(--accent-b); }
   .version-c .line.has-annotation, .version-c .line-text.has-annotation { background: rgba(68,136,255,0.15) !important; border-left-color: var(--accent-c); }
@@ -176,7 +207,7 @@
   .btn-copy.copied { background: var(--accent-b); color: #fff; border-color: transparent; }
   .toast { position: fixed; top: 80px; right: 20px; background: var(--bg-card); border: 1px solid var(--accent-gold); color: var(--accent-gold); padding: 12px 20px; border-radius: 12px; font-size: 13px; font-weight: 700; z-index: 9999; opacity: 0; transform: translateY(-10px); transition: all 0.3s; pointer-events: none; }
   .toast.show { opacity: 1; transform: translateY(0); }
-  .anno-panel { width: 420px; flex-shrink: 0; position: sticky; top: 90px; height: calc(100vh - 110px); overflow-y: auto; z-index: 10; }
+  .anno-panel { display: none !important; }
   .anno-panel-inner { background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0)), var(--bg-card); border: 1px solid var(--border-color); border-radius: 22px; padding: 24px; backdrop-filter: blur(10px); box-shadow: 0 18px 40px rgba(0,0,0,0.18); }
   .anno-panel-title { font-size: 15px; font-weight: 800; color: var(--text-primary); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; letter-spacing: 0.2px; }
   .anno-stats { display: flex; gap: 8px; margin-bottom: 18px; }
