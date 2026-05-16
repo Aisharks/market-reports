@@ -821,19 +821,108 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Delegated copy button visual feedback
   let _copyBusy = false;
+  // ========== Inline Annotation System ==========
+  let activeInlineForm = null;
+
+  function showInlineForm(lineEl) {
+    // Remove any existing inline form first
+    if (activeInlineForm) {
+      activeInlineForm.remove();
+      activeInlineForm = null;
+    }
+    const section = lineEl.closest('.section') || lineEl.closest('.compare-row');
+    const lineText = lineEl.textContent.trim();
+    const lineIndex = section ? Array.from(section.querySelectorAll('.line-text, .cell-line')).indexOf(lineEl) : 0;
+    
+    // Build inline annotation form
+    const wrap = document.createElement('div');
+    wrap.className = 'inline-anno-wrap';
+    wrap.innerHTML = '<div class="inline-anno">' +
+      '<div class="inline-anno-tag">批注 · 第' + (lineIndex + 1) + '行</div>' +
+      '<div class="inline-note" style="font-size:12px;color:#8891aa;margin-bottom:8px;line-height:1.5">' + lineText.replace(/</g,'&lt;').replace(/>/g,'&gt;') + '</div>' +
+      '<div class="inline-anno-form">' +
+      '<textarea id="inlineAnnoText" placeholder="在这里写批注内容..."></textarea>' +
+      '<div class="inline-anno-actions">' +
+      '<button class="btn-save-inline" onclick="saveInlineAnno(this)">💾 保存批注</button>' +
+      '<button class="btn-cancel-inline" onclick="cancelInlineAnno(this)">取消</button>' +
+      '</div></div></div>';
+    
+    const parent = lineEl.parentNode;
+    if (parent && parent.classList.contains('lyrics-box')) {
+      parent.insertBefore(wrap, lineEl.nextSibling);
+    } else {
+      lineEl.insertAdjacentElement('afterend', wrap);
+    }
+    
+    activeInlineForm = wrap;
+    wrap.querySelector('textarea').focus();
+    wrap.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  function saveInlineAnno(btn) {
+    const wrap = btn.closest('.inline-anno-wrap');
+    const text = wrap.querySelector('textarea').value.trim();
+    if (!text) return;
+    const lineEl = wrap.previousElementSibling;
+    const formEl = wrap.querySelector('.inline-anno-form');
+    const noteEl = wrap.querySelector('.inline-note');
+    
+    // Hide form, show saved note
+    formEl.style.display = 'none';
+    const savedNote = document.createElement('div');
+    savedNote.className = 'inline-note';
+    savedNote.textContent = '💬 ' + text;
+    savedNote.style.color = '#ff9ab3';
+    savedNote.style.marginTop = '6px';
+    savedNote.style.fontStyle = 'italic';
+    noteEl.insertAdjacentElement('afterend', savedNote);
+    noteEl.style.display = 'none';
+    
+    lineEl.classList.add('has-inline-anno');
+    
+    activeInlineForm = null;
+  }
+
+  function cancelInlineAnno(btn) {
+    const wrap = btn.closest('.inline-anno-wrap');
+    if (activeInlineForm === wrap) activeInlineForm = null;
+    wrap.remove();
+  }
+
+  // ========== Click Handler ==========
+  let _copyBusy = false;
   document.addEventListener('click', function(e) {
+    // Handle inline annotation form cancel on outside click
+    if (activeInlineForm && !e.target.closest('.inline-anno-wrap') && !e.target.closest('.line-text') && !e.target.closest('.cell-line')) {
+      activeInlineForm.remove();
+      activeInlineForm = null;
+    }
+    
+    // Copy button
     const btn = e.target.closest('.btn-copy');
-    if (!btn || _copyBusy) return;
-    _copyBusy = true;
-    btn.classList.add('copied');
-    const origText = btn.textContent;
-    btn.textContent = '✅ 已复制';
-    if (btn._ct) clearTimeout(btn._ct);
-    btn._ct = setTimeout(() => {
-      btn.classList.remove('copied');
-      btn.textContent = origText;
-      _copyBusy = false;
-    }, 3000);
+    if (btn) {
+      if (_copyBusy) return;
+      _copyBusy = true;
+      btn.classList.add('copied');
+      const origText = btn.textContent;
+      btn.textContent = '✅ 已复制';
+      if (btn._ct) clearTimeout(btn._ct);
+      btn._ct = setTimeout(() => {
+        btn.classList.remove('copied');
+        btn.textContent = origText;
+        _copyBusy = false;
+      }, 3000);
+      return;
+    }
+    
+    // Annotation mode: click line to annotate inline
+    if (annotateMode) {
+      const line = e.target.closest('.line-text') || e.target.closest('.cell-line');
+      if (line && !e.target.closest('.inline-anno-wrap') && !e.target.closest('textarea')) {
+        e.stopPropagation();
+        showInlineForm(line);
+      }
+    }
   });
 });
 </script>
