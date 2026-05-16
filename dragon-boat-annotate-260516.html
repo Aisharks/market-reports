@@ -915,13 +915,11 @@ document.addEventListener('DOMContentLoaded', function() {
       return;
     }
     
-    // Annotation mode: click line to annotate inline
-    if (annotateMode) {
-      const line = e.target.closest('.line-text') || e.target.closest('.cell-line');
-      if (line && !e.target.closest('.inline-anno-wrap') && !e.target.closest('textarea')) {
-        e.stopPropagation();
-        showInlineForm(line);
-      }
+    // Click any lyric line -> show inline annotation form directly
+    const line = e.target.closest('.line-text') || e.target.closest('.cell-line');
+    if (line && !e.target.closest('.inline-anno-wrap') && !e.target.closest('textarea') && !e.target.closest('button')) {
+      e.stopPropagation();
+      showInlineForm(line);
     }
   });
 });
